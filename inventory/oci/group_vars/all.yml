@@ -63,10 +63,10 @@ alertmanager_route:
 
   - match:
       sre_team: "yes"
-    receiver: "sre-team-mail"
+    receiver: "alertsnitch"
     continue: true
     routes:
-    - receiver: "sre-team-mail"
+    - receiver: "alertsnitch"
       continue: true          
 
 
