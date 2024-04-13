@@ -9,7 +9,7 @@ groups:
     for: 15m
     labels:
       severity: alta
-      sre_team: "no"
+      sre_team: "yes"
       support_team: "yes"
       dev_team: "yes"
       nivel: "resource"
@@ -34,7 +34,7 @@ groups:
     for: 15m
     labels:
       severity: critica
-      sre_team: "no"
+      sre_team: "yes"
       support_team: "yes"
       dev_team: "yes"
       nivel: "resource"
@@ -47,7 +47,7 @@ groups:
     for: 20m
     labels:
       severity: critica
-      sre_team: "no"
+      sre_team: "yes"
       support_team: "yes"
       dev_team: "yes"
       nivel: "resource"
@@ -71,7 +71,7 @@ groups:
     for: 1m
     labels:
       severity: critica
-      sre_team: "no"
+      sre_team: "yes"
       support_team: "yes"
       dev_team: "yes"
       nivel: "resource"
@@ -84,7 +84,7 @@ groups:
     for: 60m
     labels:
       severity: media
-      sre_team: "no"
+      sre_team: "yes"
       support_team: "yes"
       nivel: "resource"
 
@@ -96,7 +96,7 @@ groups:
     for: 60m
     labels:
       severity: alta
-      sre_team: "no"
+      sre_team: "yes"
       support_team: "yes"
       nivel: "resource"
 
@@ -108,7 +108,7 @@ groups:
     for: 5m
     labels: 
       severity: alta
-      sre_team: "no"
+      sre_team: "yes"
       support_team: "yes"
       dev_team: "yes"
       nivel: "resource"
@@ -125,7 +125,7 @@ groups:
       severity: critical
       support_team: "yes"
       email: "yes" 
-      sre_team: "no"
+      sre_team: "yes"
       nivel: "resource"
 
   - alert: FilaRabbitMQComAcumuloDeMensagens
@@ -133,7 +133,7 @@ groups:
     for: 5m
     labels: 
       severity: media
-      sre_team: "no"
+      sre_team: "yes"
       support_team: "yes"
       nivel: "resource"
     annotations:
@@ -145,7 +145,7 @@ groups:
     for: 5m
     labels: 
       severity: alta
-      sre_team: "no"
+      sre_team: "yes"
       support_team: "yes"
       nivel: "resource"
     annotations:
@@ -157,7 +157,7 @@ groups:
     for: 5m
     labels: 
       severity: media
-      sre_team: "no"
+      sre_team: "yes"
       support_team: "yes"
       nivel: "resource"
     annotations:
@@ -169,7 +169,7 @@ groups:
     for: 5m
     labels: 
       severity: media
-      sre_team: "no"
+      sre_team: "yes"
       support_team: "yes"
       nivel: "resource"
     annotations:
@@ -180,7 +180,7 @@ groups:
     for: 10m
     labels: 
       severity: critica
-      sre_team: "no"
+      sre_team: "yes"
       support_team: "yes"
       dev_team: "yes"
       nivel: "resource"
@@ -193,7 +193,7 @@ groups:
     for: 10m
     labels: 
       severity: critica
-      sre_team: "no"
+      sre_team: "yes"
       support_team: "yes"
       dev_team: "yes"
       nivel: "resource"
@@ -206,7 +206,7 @@ groups:
     for: 10m
     labels: 
       severity: alta
-      sre_team: "no"
+      sre_team: "yes"
       support_team: "yes"
       dev_team: "yes"
       nivel: "resource"
@@ -219,7 +219,7 @@ groups:
     for: 10m
     labels: 
       severity: media
-      sre_team: "no"
+      sre_team: "yes"
       support_team: "yes"
       dev_team: "yes"
       nivel: "resource"
@@ -232,7 +232,7 @@ groups:
     for: 5m
     labels: 
       severity: alta
-      sre_team: "no"
+      sre_team: "yes"
       support_team: "yes"
       dev_team: "yes"
       nivel: "resource"
@@ -245,7 +245,7 @@ groups:
     for: 5m
     labels: 
       severity: alta
-      sre_team: "no"
+      sre_team: "yes"
       support_team: "yes"
       dev_team: "yes"
       nivel: "resource"
@@ -260,7 +260,7 @@ groups:
     for: 5m
     labels: 
       severity: critica
-      sre_team: "no"
+      sre_team: "yes"
       support_team: "yes"
       nivel: "resource"
     annotations:
@@ -272,7 +272,7 @@ groups:
     for: 2m
     labels:
       severity: critica
-      sre_team: "no"
+      sre_team: "yes"
       support_team: "yes"
       nivel: "resource"
     annotations:
@@ -291,7 +291,7 @@ groups:
     for: 5m
     labels:
       severity: critical
-      sre_team: "no"
+      sre_team: "yes"
       suporte_team: "yes"
       nivel: "resource"
     annotations:
@@ -305,7 +305,7 @@ groups:
     for: 60s
     labels:
       severity: critical
-      sre_team: "no"
+      sre_team: "yes"
       suporte_team: "yes"
       nivel: "resource"
     annotations:
@@ -319,7 +319,7 @@ groups:
     for: 5m
     labels:
       severity: critical
-      sre_team: "no"
+      sre_team: "yes"
       suporte_team: "yes"
       nivel: "resource"
     annotations:
@@ -333,7 +333,7 @@ groups:
     for: 5m
     labels:
       severity: critical
-      sre_team: "no"
+      sre_team: "yes"
       suporte_team: "yes"
       nivel: "resource"
     annotations:
@@ -346,7 +346,7 @@ groups:
     for: 24h
     labels:
       severity: aviso
-      sre_team: "no"
+      sre_team: "yes"
       suporte_team: "yes"
       nivel: "resource"
     annotations:
@@ -358,7 +358,7 @@ groups:
     for: 2h
     labels:
       severity: media
-      sre_team: "no"
+      sre_team: "yes"
       suporte_team: "yes"
       nivel: "resource"
     annotations:
@@ -370,7 +370,7 @@ groups:
     for: 0m
     labels:
       severity: critica
-      sre_team: "no"
+      sre_team: "yes"
       suporte_team: "yes"
       nivel: "resource"
     annotations:
@@ -382,7 +382,7 @@ groups:
     for: 0s
     labels:
       severity: critical
-      sre_team: "no"
+      sre_team: "yes"
       suporte_team: "yes"
       nivel: "resource"
     annotations:
