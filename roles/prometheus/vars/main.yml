@@ -1,0 +1,195 @@
+---
+go_arch_map:
+  i386: '386'
+  x86_64: 'amd64'
+  aarch64: 'arm64'
+  armv7l: 'armv7'
+  armv6l: 'armv6'
+
+go_arch: "{{ go_arch_map[ansible_architecture] | default(ansible_architecture) }}"
+_prometheus_binary_install_dir: '/usr/local/bin'
+
+__prometheus_checksums:
+- e65d4ca0676bec55d21947290d51a62126cba829f7a8cec93808a35f17e63174  prometheus-2.45.0.darwin-amd64.tar.gz
+- 15af7577dd7f6849a6a17409ec82fe4ac2865811c7a9a2c035cad45643442710  prometheus-2.45.0.darwin-arm64.tar.gz
+- 0cd0556beb0acb59469c1cc024711ab07e85d3b52525eeda219348c620786e11  prometheus-2.45.0.dragonfly-amd64.tar.gz
+- 152e3def16cf2fb3759d8c434b83d7b8d41b912baae16902a7d36579adf2e619  prometheus-2.45.0.freebsd-386.tar.gz
+- 88de94e94cae4a0dd0a54dfb2309fc5a4b02d18f3df193a843bb796a4d8d77d6  prometheus-2.45.0.freebsd-amd64.tar.gz
+- f135813c0c20edc7a904ff0fcff58c2eadb08a1fa5397f30ea80c105f6679259  prometheus-2.45.0.freebsd-arm64.tar.gz
+- 481e1f0aeb7f41f9c80629d7680c7513a0414fee8b6e7c5ddce7a4fd346e4f99  prometheus-2.45.0.freebsd-armv6.tar.gz
+- 33f2444675b9b14b304e63be36894a1602b4f9d20b7a332f727f313e3ddcbe59  prometheus-2.45.0.freebsd-armv7.tar.gz
+- a073101ddcae4f8925d01d9db16b11800ce208ac4f9c4d30b5a4d7b7de52985c  prometheus-2.45.0.illumos-amd64.tar.gz
+- 3da85e57ccfa52942c829ba190b70963c15e44fa43c84db9bef1d8ce46a7f719  prometheus-2.45.0.linux-386.tar.gz
+- 1c7f489a3cc919c1ed0df2ae673a280309dc4a3eaa6ee3411e7d1f4bdec4d4c5  prometheus-2.45.0.linux-amd64.tar.gz
+- eb7c3f28a83892dcd1a1c85d0ba7e1f7f9f3e7a74b567fd65a4aa2e7f8aa981a  prometheus-2.45.0.linux-arm64.tar.gz
+- 190cb2b5d7c9700e916a427f92b8d0b5b5f0aa9ab6372cd1aba9f29aed26fa6b  prometheus-2.45.0.linux-armv5.tar.gz
+- ce0566e34b2812de1c2b418528053db8841b8bfef1cd04e323dc7b0f8ad462d8  prometheus-2.45.0.linux-armv6.tar.gz
+- 36134e4dabcc26bfa5fbee8282ec49e6a5287652603a44b2df5c73398e28b5a2  prometheus-2.45.0.linux-armv7.tar.gz
+- 88128f00f822e6875d9e34e3e27907f6e9abc774f18d76d692b8f70c84ac963c  prometheus-2.45.0.linux-mips.tar.gz
+- 617682bbe6ad9259198debfe9ab5870f91136e4155fd2ee64b571f959b690a3e  prometheus-2.45.0.linux-mips64.tar.gz
+- 4baecc834ad4395b40e1d33bff58f5551d61b0308688d7999c91b370bbbf0c86  prometheus-2.45.0.linux-mips64le.tar.gz
+- 8da60bd23251d2712323e4c2b2a5a937b54a75389b02c3a1abacbc61bc98a02d  prometheus-2.45.0.linux-mipsle.tar.gz
+- 71e5741b9df8979a14db0eebed804667b1429835a6c0fe247df6dbc167f72194  prometheus-2.45.0.linux-ppc64.tar.gz
+- 4ff341023843932ad3daf8154bcd9f0d85f576d54d9e4586f01cd6d6049896b7  prometheus-2.45.0.linux-ppc64le.tar.gz
+- 7419946f9f32f0cb13d8cbf73e94ea910c7cfcb2a2a0caa9934438f8a2ced8b6  prometheus-2.45.0.linux-s390x.tar.gz
+- 9e8c2aa9793b735453673d6939beda88bcb5e133b9e43250b4be6759b7e5b8f0  prometheus-2.45.0.netbsd-386.tar.gz
+- ee88f632e02a1cb46364dcd8a830686b80c159b23944ae7922058d89418403c9  prometheus-2.45.0.netbsd-amd64.tar.gz
+- 6040a825b62e9db139fb287fb2384925ad9d9fa641586a143a522855e56f629c  prometheus-2.45.0.netbsd-arm64.tar.gz
+- 0cc48fd91620351f6e7dd4a395d7881b0350f0b52dc9567640faff01289fb867  prometheus-2.45.0.netbsd-armv6.tar.gz
+- 2c480b9d9b4eae29ecc5fd4bf4fd79400af78d81331a2b928102e170a0911cdd  prometheus-2.45.0.netbsd-armv7.tar.gz
+- ecf9a0f4278a8fb11ff3d92c3a5cdd1b044fce24fa0e0b514ad43ab5203ba788  prometheus-2.45.0.windows-386.tar.gz
+- dcc046f759a97cf766fba767710049ec7f055d2267c125c506a03d757a07ca74  prometheus-2.45.0.windows-386.zip
+- ee41b6e40d846232adbb43254e0b127c9f4eb702905fa6cf76c1ba75204af7ac  prometheus-2.45.0.windows-amd64.tar.gz
+- c50feaf6b9f7bcf3d0caa3575122afcd470f1313824c480e715c4c80eb34f436  prometheus-2.45.0.windows-amd64.zip
+- c38fd90b4542fba85600e4b4bc0477c6655f5ba634b591e030d49a6a141b44d6  prometheus-2.45.0.windows-arm64.tar.gz
+- f1c2c8293d6240bd72091978420beb3a4e32a7ceb94c6fd7333d5e788ad40f13  prometheus-2.45.0.windows-arm64.zip
+- c5f231ab570590b8d2c633cf7428e0bfe14ebdb50675e66945e71b488154017a  prometheus-web-ui-2.45.0.tar.gz
+
+
+
+
+#   - 870b5d6e16554415efca46873e87ba64e7a69d2095fcbc79b9bae491a78e4264  prometheus-2.37.5.darwin-amd64.tar.gz
+#   - a8914bc21f630f31e3842b260086db2eb63330b52f7f69150538de9e6f532696  prometheus-2.37.5.darwin-arm64.tar.gz
+#   - b0093179cc9fa45699f5c57d47b60e7b5554627416814391eb38b5ea9a61519f  prometheus-2.37.5.dragonfly-amd64.tar.gz
+#   - fb880b07d859e21be1c870e9edaafe2c2a69b805e6710136c6050677ec72b408  prometheus-2.37.5.freebsd-386.tar.gz
+#   - d23c7d9d29b5343c9f53caa437445d88d0e1e468fe8da04c12621333522be6fd  prometheus-2.37.5.freebsd-amd64.tar.gz
+#   - d9a0e1f2e59c053b6f175b97eb42054885bb38de5421bb98f4a61af9b2203bce  prometheus-2.37.5.freebsd-arm64.tar.gz
+#   - c1fec0923378062e8e32d2ee324be6f7913c1bf6f1f2abca680af06443cf681d  prometheus-2.37.5.freebsd-armv6.tar.gz
+#   - 97c749bc640ad42e911b508087fe74b6a9a9e7c6bac4e09934926ce91dd7a855  prometheus-2.37.5.freebsd-armv7.tar.gz
+#   - 3635aa703d79f078fc4c289596ab307e19fb6b0e07bd51d16de37ae80d08451b  prometheus-2.37.5.illumos-amd64.tar.gz
+#   - 13a926f4731f641151c68169f5f0db044404b8b695a396e0752f27f514ffd4bb  prometheus-2.37.5.linux-386.tar.gz
+#   - a5824b2395a440caed8fda287bab6f91203ee765e623418ce452370285a6ce18  prometheus-2.37.5.linux-amd64.tar.gz
+#   - 93efe3e4e9fb860e557dcef19cca6be056abd7c4c02c45c218935134c10d589a  prometheus-2.37.5.linux-arm64.tar.gz
+#   - b25d0af4cc4f894863a6495ede1ae71c02979f01206642d0f818888c696cc2d4  prometheus-2.37.5.linux-armv5.tar.gz
+#   - 985803b31f9b8fd0499a0abbba469db7e5f07a1f35be1bf3c6732e42818978e7  prometheus-2.37.5.linux-armv6.tar.gz
+#   - 9d90d05986d19377aa211aff15d7445787628006d20a4d6908f529259a95af33  prometheus-2.37.5.linux-armv7.tar.gz
+#   - 9fcdd8d5210340b02429a2f573e66bf2043bac2db43263fbd7645e8f180c620a  prometheus-2.37.5.linux-mips.tar.gz
+#   - 92b4da20a7eae0db78ed9ce9b63cf12567140a3292fce0d6001ec97248d1e4ed  prometheus-2.37.5.linux-mips64.tar.gz
+#   - 76fee4b626bd8b8cbbbe4cd90f12c5dc7c78da9fd384020fe554c62f60678458  prometheus-2.37.5.linux-mips64le.tar.gz
+#   - 00d5854dac1d091cf6911aba06ed72d370a166e054b14583e2c6be68778e4b74  prometheus-2.37.5.linux-mipsle.tar.gz
+#   - 08b1f7ebeab5e709b1a21015f56fc9f2a38f6cfb8b1dcb25992ff64974f9ecd9  prometheus-2.37.5.linux-ppc64.tar.gz
+#   - 17d9b03f1541c20ffe9358b277d94825f07b4aa055161ebe7523b0fe333e2457  prometheus-2.37.5.linux-ppc64le.tar.gz
+#   - 46b5ef36ddffbd17fdf3d74d2e7b3cd024242fa179855999f731fb59307a2e1c  prometheus-2.37.5.linux-s390x.tar.gz
+#   - d9343c243eb3f5bd812ec0fa96f8bb8f157c39631bb146d8f1ec36d92aeb3409  prometheus-2.37.5.netbsd-386.tar.gz
+#   - a9e529b8e2fe443cc67b3fc29c4195e38dce191525e05f186af79029ec87f5ea  prometheus-2.37.5.netbsd-amd64.tar.gz
+#   - 6ca0317ae1f2aab549fe55496fb4a29789433d8e83be5b25ecd1b97d726f67cd  prometheus-2.37.5.netbsd-arm64.tar.gz
+#   - d4ecee9b3d5e154ccd462300fa1c49ce12fa8d75b8fe5e35f48034638eba9c45  prometheus-2.37.5.netbsd-armv6.tar.gz
+#   - 469b7ffb372b2b41a40762bf2462e598e7d2a52fdcf718b95412c4915173b85f  prometheus-2.37.5.netbsd-armv7.tar.gz
+#   - a78d8f061a78a2166eeafef71c0d3f2956bc78670dd421e4b223fb8490d513be  prometheus-2.37.5.windows-386.tar.gz
+#   - 1b74792f48475197719b8253e0c32f0e76c3c4b8c4d13ee163b985b4747c2c22  prometheus-2.37.5.windows-386.zip
+#   - b7df92dd084b84e3ef5f77678519f08ed7c42dea0a1447ab774b6b9420b703c9  prometheus-2.37.5.windows-amd64.tar.gz
+#   - 2debcf9705030a1174855236c133a9ff5c08e40bb4ccf210f3415382cacd950a  prometheus-2.37.5.windows-amd64.zip
+#   - 1f3b8443593e06415e446f3326b0187f4aca6fbc0a04a4f359d7f686dd116c68  prometheus-2.37.5.windows-arm64.tar.gz
+#   - 2ec8452e9fa656497a28f2a36596a50c4cca233bdaebc6e638bacbad9d234297  prometheus-2.37.5.windows-arm64.zip
+#   - 1bfcee5d7fe6e31b8f2d5d710473242a4f2c0eaebeb9462260be5f0ac92ca556  prometheus-web-ui-2.37.5.tar.gz
+
+
+
+# __prometheus_checksums:
+#   - 5648ffa7ea34eabe65a21ead97f167ab302f08f8f29bd74a1c6ecbf8ef0e7566  prometheus-2.16.0.darwin-386.tar.gz
+#   - a8c4d56f9dd96397779a0e76fface249e707b23d7cbb24d7fc8a5d3d1c19352f  prometheus-2.16.0.darwin-amd64.tar.gz
+#   - 9ab7b3d6cea32657f04b903a5b86f51fa598a168b10a08d71685d5298e42d352  prometheus-2.16.0.dragonfly-amd64.tar.gz
+#   - 5e0c9a7698ed43f8157e06510add3ef509945eb179465e910fe2ce4666c88bc2  prometheus-2.16.0.freebsd-386.tar.gz
+#   - e3e90e9cb98cbc483f0198513e5df2bc1fab77752c8ad2c17f3e53f12ff202ea  prometheus-2.16.0.freebsd-amd64.tar.gz
+#   - 7517f20921ee6b404bf4c015f10746d7b0154cead42c6eb5a211ef58b272026e  prometheus-2.16.0.freebsd-armv6.tar.gz
+#   - 66b4ac89fd3951846955454ebca8e5b67a1a88379f1751618b4b1b916bbf2604  prometheus-2.16.0.freebsd-armv7.tar.gz
+#   - 09f64bf249ff87f541a7971316e55c802e1923417e2674f72a7a0154f6ce2782  prometheus-2.16.0.linux-386.tar.gz
+#   - c04e631d18e186b66a51cac3062157298e037ffae784f35ccaaf29e496d65d3f  prometheus-2.16.0.linux-amd64.tar.gz
+#   - 76e8a6abe2880b4f2c61a6bc7ca9461b8e4cba54d2fc7f40b0a9b94e76252bd6  prometheus-2.16.0.linux-arm64.tar.gz
+#   - bca4a0221045948659eab36f702d02494103414a13fad7ec39e4f645084ded63  prometheus-2.16.0.linux-armv5.tar.gz
+#   - 35a68da888e4b94bfbb25a4287a16710b352806042754171add78e33c2d30988  prometheus-2.16.0.linux-armv6.tar.gz
+#   - 2ce8f9a0b0a82ffd65ffeaa1b48fa55c8f7b30969c479685cc8f3107d2be9875  prometheus-2.16.0.linux-armv7.tar.gz
+#   - 816168bd08006aad22f7a09c33c2612f11eab3bb98548e7c6d344a58906344df  prometheus-2.16.0.linux-mips64.tar.gz
+#   - a0298db7f2aca7ba719683eb1e3c157765f2137c9bcb0f988c7abc8c82928f39  prometheus-2.16.0.linux-mips64le.tar.gz
+#   - 1d99364b0ba6cc073ed2138f037cdafab42bf3cb82cfd7e4fa9a1f3d500c8d52  prometheus-2.16.0.linux-ppc64.tar.gz
+#   - ff9693b3800ed1a708920c6194076cc34c33ddf10ab1f17f5be824759f60d102  prometheus-2.16.0.linux-ppc64le.tar.gz
+#   - 258ec00e94f62158968f016058f4f179a7d38a1f5222f106be4a7f844fa2885f  prometheus-2.16.0.linux-s390x.tar.gz
+#   - d40f674d9890cf19ddaf32e0c86fb7e02908783625ea6872610e0c89cb090642  prometheus-2.16.0.netbsd-386.tar.gz
+#   - 918bf18e755ae005edcb98551a328da3a1efaed92fd0b623951195178f5bcd31  prometheus-2.16.0.netbsd-amd64.tar.gz
+#   - b6f258aa0fa0e0b0f3b69405d27375b50324276bd5cacf97039f701d3830fe56  prometheus-2.16.0.netbsd-armv6.tar.gz
+#   - 35163adbb20f93ca6142e2d4b436091d5f3935a3dee9e4b948a20ab4fe2468ea  prometheus-2.16.0.netbsd-armv7.tar.gz
+#   - 13280a90ba802167898e0baa4771b8f75ed2b8b3682713aab41180a408cae973  prometheus-2.16.0.openbsd-386.tar.gz
+#   - 4f5985822b332511c33705f0e071395a2e44627cbb52aaa0dfa2e889727a9853  prometheus-2.16.0.openbsd-amd64.tar.gz
+#   - a8edacc4d4944432f6e87e39fd63ed882ff96be7c61e0667f3314b2a0d19f8e5  prometheus-2.16.0.openbsd-armv7.tar.gz
+#   - a4c2dd7cdb63fd95b0af712742488309042b834df8c6215f30f8b3e7f0b35a63  prometheus-2.16.0.windows-386.tar.gz
+#   - 13522f391e7c1e4cd3d44de5e5498db1a9ce68445a2cc386a31faae90870ba4e  prometheus-2.16.0.windows-amd64.tar.gz
+
+
+# ultima tentativa de atualização para a 2.40 falhou. falha na api 
+# __prometheus_checksums:
+#   - 3aa9cce3d2651534b8995b3dd27683263ec2ad4dd3688363c181b50cf81d4c31  prometheus-2.40.7.darwin-amd64.tar.gz
+#   - c6c7b9364419493a5d15a6245cd61872ce1ea0b7799c14e3ccd2623389b12878  prometheus-2.40.7.darwin-arm64.tar.gz
+#   - d7f95084433a3fd78b0f81387413aca9517e83a0d8c2c5b599c949f2fecceea9  prometheus-2.40.7.dragonfly-amd64.tar.gz
+#   - ec109169733e090fea6fa0f2ebeee69d08cfcd9774c0ee7731165125f12ff4af  prometheus-2.40.7.freebsd-386.tar.gz
+#   - 880bda04be011297b9afa039f4e94dcc146c4277dbbb1c5d901035a6e42bbd68  prometheus-2.40.7.freebsd-amd64.tar.gz
+#   - badb76eac31bda5c43f15f933f58384e2ddfb893dd2cfe7f8fbcdd808799800c  prometheus-2.40.7.freebsd-arm64.tar.gz
+#   - 7cac5703931a4f7a594357f868408ff02124a2fa88a3d2d0d0dbbba8c4abf65c  prometheus-2.40.7.freebsd-armv6.tar.gz
+#   - 8929ca17205e08b014727db6fb88dbbf6e1b46778414c67fa24d7717fbdc02e6  prometheus-2.40.7.freebsd-armv7.tar.gz
+#   - 5dd3db9a9676d2f7eca60089f64793b938faf12073304d9889e07313d507c39d  prometheus-2.40.7.illumos-amd64.tar.gz
+#   - 8a30725bc03f089673c4c8f014118c40e75e45675c5f8d9667e33f2425dede51  prometheus-2.40.7.linux-386.tar.gz
+#   - c1b40a6f510355564b445dc68fa3c3e6af278cc55fcf36821b9e18f96b4c4cde  prometheus-2.40.7.linux-amd64.tar.gz
+#   - 71341f92343b3ab59ada0dd3a3967c26d001dd11b9c77ad150937e3f6d36d0e4  prometheus-2.40.7.linux-arm64.tar.gz
+#   - 417259b8a7a830464f158478c57fe92ac261cf04220a6ec0db87858fc5dd0a8d  prometheus-2.40.7.linux-armv5.tar.gz
+#   - 6ff591ae481bc7cad0af0580078614e61fce532a371fb2dfee9f937e7b691f73  prometheus-2.40.7.linux-armv6.tar.gz
+#   - c626e21edb4af20a74bbe00c193572b14f2ca5a19805a259b24cdef4e8e467de  prometheus-2.40.7.linux-armv7.tar.gz
+#   - b60c0f7481656dd2f9e49f5f794b766ce8123a4f46c212bbfbab0407dc2d7874  prometheus-2.40.7.linux-mips.tar.gz
+#   - bd02227b0950b8df8d49d520ff8d65cc5765ba3d04355797caa0b646de318462  prometheus-2.40.7.linux-mips64.tar.gz
+#   - 14bffb2c515952cddce0cf9c8569793cff5fb4df75f5bd9954b0aa26225e50fa  prometheus-2.40.7.linux-mips64le.tar.gz
+#   - 31fb20ae42b52c989029575b692b162a77d56becc4d0ad8ccc4b9ae77f4099a5  prometheus-2.40.7.linux-mipsle.tar.gz
+#   - 7cc1e0be9ef3e01197e349aa7bea7ec63c1b8ce6782e7cb93275c401df84af97  prometheus-2.40.7.linux-ppc64.tar.gz
+#   - b04cbecce1c814c6b3009b3cb1dabcefaa0cb70bb7ea7d0576816681469d7c98  prometheus-2.40.7.linux-ppc64le.tar.gz
+#   - 9a961996deeb232d3a001f7baea10775fe6a7881e52d6ee5d52ac21e4bcc4d5e  prometheus-2.40.7.linux-s390x.tar.gz
+#   - e05e39e2f60498414f2fe1b606e3d351ca33c29680fb291234a6536c1b8a689e  prometheus-2.40.7.netbsd-386.tar.gz
+#   - 89645e11e2d898fec2266c37e730271ea47ccbb24451fab3511bf75f3f723a96  prometheus-2.40.7.netbsd-amd64.tar.gz
+#   - 3fde6744ab87ae0ba53c13e2d53de7480c114464e6e248632f136d87ea163e3d  prometheus-2.40.7.netbsd-arm64.tar.gz
+#   - cc4278714de02f550fcced0ae19d22e76ca2b1c24470253f3a4f417a131daf0f  prometheus-2.40.7.netbsd-armv6.tar.gz
+#   - de8f8994bb8a28a80c2a4883d4b30c80757e73952f234e88786057395e792f89  prometheus-2.40.7.netbsd-armv7.tar.gz
+#   - 1975f81e6d39bc93bfc3929b761c40d23fd4e0f74b3271e85747bc624a58ad77  prometheus-2.40.7.windows-386.tar.gz
+#   - 8415b61b9e0a1075048631b9a8c93ca7ad032f9e2ae6f3d7a86614660cd8d5eb  prometheus-2.40.7.windows-386.zip
+#   - b0e4164c255aa0b3750a5db35a1b7885f83296112fd8711abffe7035292a8fdc  prometheus-2.40.7.windows-amd64.tar.gz
+#   - bee1da87b2674cb8635e35dec1014ebd0d967b14d3499a90b3dfb14c25217335  prometheus-2.40.7.windows-amd64.zip
+#   - a2864f5bd31bf5309f77c314b005c9209941e725fcbd27dac8bf19c27d3442d1  prometheus-2.40.7.windows-arm64.tar.gz
+#   - 47536c05e508ce52ff88b3e3432ebbe30a2462fb37e1e849e501933ec71d8d3a  prometheus-2.40.7.windows-arm64.zip
+#   - 7b6e7e78f126e7dd6b46d9037ac961dda8d7b5b5cda7c6a2cbc02a99fb6368cf  prometheus-web-ui-2.40.7.tar.gz
+
+
+# Validação para o alertmanager desativada, verificar projeto motivo pelo qual não esta funcionando corretamente.
+# __alertmanager_checksums:
+#   - e9fa07f094b8efa3f1f209dc7d51a7cf428574906c7fd8eac9a3aed08b03ed63  alertmanager-0.25.0.darwin-amd64.tar.gz
+#   - 7a5a4ab923146fb6ed4c7b1fc29beca7f7f47d0b81701f8ba496830f922c6359  alertmanager-0.25.0.darwin-arm64.tar.gz
+#   - e6579c6686471baad8f6c63bfe14e69f31ee7d62a9eb554236749b5a9b186e3f  alertmanager-0.25.0.dragonfly-amd64.tar.gz
+#   - 12aa5c321b38cc687da66154a86565a9a5eadd882607973427d8396f221fcbc6  alertmanager-0.25.0.freebsd-386.tar.gz
+#   - fa5e302302afd8269c3376fbe6878a670d9e7c8edcc176a4d779a71d02dde980  alertmanager-0.25.0.freebsd-amd64.tar.gz
+#   - fa08c911317a17ec1689a29a9b7c43b6b284eb3985f9a8692535d162bf6ea899  alertmanager-0.25.0.freebsd-arm64.tar.gz
+#   - 931c2e50332e2751bdd7746f1e436df939157f82f18ff239c5a891e59705e5bf  alertmanager-0.25.0.freebsd-armv6.tar.gz
+#   - 4c008959d5f3cf89a078faea2c5abe74e787ac45ce6116e8cdbc0e9da072d3c1  alertmanager-0.25.0.freebsd-armv7.tar.gz
+#   - f39b022eac828331fccaf37f866c575c12fcd402c391803eed920eabb751e453  alertmanager-0.25.0.illumos-amd64.tar.gz
+#   - daa82af3cb4d3c241f93faa011b0805ee5d357c523ac706ef83b6addd5a7e4da  alertmanager-0.25.0.linux-386.tar.gz
+#   - 206cf787c01921574ca171220bb9b48b043c3ad6e744017030fed586eb48e04b  alertmanager-0.25.0.linux-amd64.tar.gz
+#   - 20db5e4e12bcce8e2e419cc4c2bc35062ddbc14d2aacb77e4d5684c0eab7f0fe  alertmanager-0.25.0.linux-arm64.tar.gz
+#   - 1a3dac97b88a2d2ef6c950965c1f84a2fb5eaaa41d5cbaa6d94b7acea522b93f  alertmanager-0.25.0.linux-armv5.tar.gz
+#   - 9539413ef182e55db82e17a01cd4efdd233c78cadf9da28f8e00dcfb8b571af0  alertmanager-0.25.0.linux-armv6.tar.gz
+#   - 3cfd839d4463a7679d32800258b11471498ebc49483273d588818c0432a80af1  alertmanager-0.25.0.linux-armv7.tar.gz
+#   - 94219bd0d8500fe4e09ce4d1c1a6b496bc2744add7d741cb988263c8cadee726  alertmanager-0.25.0.linux-mips.tar.gz
+#   - 5b288c4114bfed9e47ff809ca6350f174d74a41f2689b4da656eead719a0031e  alertmanager-0.25.0.linux-mips64.tar.gz
+#   - 985ba2d5c5d59ee542656900182d862cb5a9efdf700cee6b91aded57dad12fe4  alertmanager-0.25.0.linux-mips64le.tar.gz
+#   - f14365d9edaec4708ba58002fd7a103df7def4e61bf5c851f640dc587eb2e8b1  alertmanager-0.25.0.linux-mipsle.tar.gz
+#   - e6f90ef137a1bd48c6f85cfe19ea8576c0a159a15b0638f5fa3e5ef8733cc3c0  alertmanager-0.25.0.linux-ppc64.tar.gz
+#   - 60a64b81da8472fca3e3b413f3f812d417f78ff974180a8ecb038e5c7970934c  alertmanager-0.25.0.linux-ppc64le.tar.gz
+#   - 26e91d3b08e82adb906f93525471c809b2c27a9f62d7482788969859e4a5d516  alertmanager-0.25.0.linux-s390x.tar.gz
+#   - dcc8de605f7c5c071283e114f6026cace4bad468ae9b4cfd84f4da9d2cb328e8  alertmanager-0.25.0.netbsd-386.tar.gz
+#   - e9677c77eddb92fa63e455fcd64433b4366ed5e70772d216d3497a35b86932fd  alertmanager-0.25.0.netbsd-amd64.tar.gz
+#   - 4dd420d989c739e3ae6de07112e3de299f4c28831b73d86bf4c74c4c721ca153  alertmanager-0.25.0.netbsd-arm64.tar.gz
+#   - 21941676619226143ba8228de5980bb3e0f4a3ee8f7b47f9d4e61dccd4c31e69  alertmanager-0.25.0.netbsd-armv6.tar.gz
+#   - af633386af7a020fbf530a8e20f44a671fa6bf1277cc3d29d10a32381c4a5107  alertmanager-0.25.0.netbsd-armv7.tar.gz
+#   - fc2a05feac2aee8c1a6cdc394bf8088ac48750cd8926f704d4398dc7adbb8464  alertmanager-0.25.0.openbsd-386.tar.gz
+#   - a901c154c1c569f4a6e0f83558341d2182304ca905e5a666f75955188da78911  alertmanager-0.25.0.openbsd-amd64.tar.gz
+#   - d0348ccb0b5efbb198cd24ada925784a4053af5bc3d23f280040079633673e6a  alertmanager-0.25.0.openbsd-arm64.tar.gz
+#   - f9a5aaaa1d0bdf2426868dba58d31a4b0511c5b36c75f6456817fd299ef29faf  alertmanager-0.25.0.openbsd-armv7.tar.gz
+#   - 6d5d003eb4f5690b568b497d9c843d030541229162ad0d377acd2a14f06e3d83  alertmanager-0.25.0.windows-386.tar.gz
+#   - d2cd7cce46b5099b76a2d334476ef019fec207bfa41b1bf0427810e5f5fe398f  alertmanager-0.25.0.windows-386.zip
+#   - de8209a2d09ec3ce89b5d4601f3042cafed4b0491943a4f6e8e5ae21b1ba4a47  alertmanager-0.25.0.windows-amd64.tar.gz
+#   - 609359143f89b3ae3cdc86475ebf8710db891318093c2881dc691b30d8c6f0ac  alertmanager-0.25.0.windows-amd64.zip
+#   - 7131c68eb4e34a8a12831713ee1739811c1d4c2adb86ba3640f20cb0a81f4483  alertmanager-0.25.0.windows-arm64.tar.gz
+#   - 9a823480b99f2aeda914f88abae5f65a96c0612024313f5bcd7d927056eb8552  alertmanager-0.25.0.windows-arm64.zip
+#   - 31c6c2917f84a34a7bad5eb0ac0ba4ad2c9202d2ea1d268cc7dbe9cd3632beba  alertmanager-web-ui-0.25.0.tar.gz

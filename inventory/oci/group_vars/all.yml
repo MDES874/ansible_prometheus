@@ -1,0 +1,1296 @@
+prometheus_static_targets_files: "{{playbook_dir}}/custom/oci/*targets*.yml"
+prometheus_alert_rules_files: "{{playbook_dir}}/custom/oci/*alerts.rules"
+prometheus_db_dir: /data/prometheus
+
+prometheus_alertmanager_config:
+- scheme: http
+  static_configs:
+  - targets: ["127.0.0.1:9093"]
+
+alertmanager_smtp:
+  from: 'alertas@ndd.tech'
+  smarthost: 'mail.nfendd.com.br:25'
+  auth_username: 'alertas.ngeria'
+  auth_password: 'TipUPreqebr0'
+  require_tls: false
+
+alertmanager_receivers:
+
+- name: 'sre-team-telegram'
+  webhook_configs:
+  - url: 'http://localhost:9876/alert'
+    max_alerts: 5      
+
+- name: 'sre-team-msteams'
+  webhook_configs:
+  - url: 'http://localhost:2000/sre_msteams'
+
+- name: alertsnitch
+  webhook_configs:
+    - url: http://br-oci-nigl01.dcndd.local:9567/webhook
+
+- name: 'sre-team-mail'
+  email_configs:
+  - to: 'maick.souza@ndd.tech' 
+    headers:
+      subject: '{{ "{{" }} template "email.ndd.subject" . {{ "}}" }}' 
+    html: '{{ "{{" }} template "ndd-email" . {{ "}}" }}' 
+
+# ALERTMANAGER ROUTES
+
+alertmanager_route:
+  repeat_interval: 12h
+  receiver: sre-team-msteams
+  group_by: [alertname, ambiente]
+  routes:
+  
+  - match:
+      sre1_team: "yes"
+    receiver: "sre-team-msteams"
+    continue: false
+    routes:
+    - receiver: "sre-team-telegram"
+      continue: true
+      mute_time_intervals:
+      - semana_comercial       
+    - receiver: "sre-team-mail"
+      continue: true
+      repeat_interval: 24h
+      mute_time_intervals:
+      - semana_comercial      
+    - receiver: "sre-team-msteams"
+      continue: true
+    - receiver: "oncall-skyview"
+      matchers:
+      - produto = "skyview"
+      - severity = critical
+      continue: true
+
+  - match:
+      sre_team: "yes"
+    receiver: "sre-team-mail"
+    continue: true
+    routes:
+    - receiver: "sre-team-mail"
+      continue: true          
+
+
+### FIM ALERMANAGER ROUTES
+
+alertmanager_inhibit_rules:
+- target_match:
+    alertname: Watchdog
+- target_match:
+    env: prd     
+
+
+### GERENCIAMENTO DE MUTE INTERVALS
+
+alertmanager_mute_time_intervals:
+- name: semana_comercial
+  time_intervals:
+  # alertas ativos das 8:00 as 18:00 - horario deve ser preenchido utc
+  - times:
+    - start_time: "00:00"
+      end_time: "11:00"
+    - start_time: "21:00"
+      end_time: "24:00"
+    weekdays: ['monday:friday']
+  - weekdays: ['saturday' , 'sunday'] 
+
+- name: semana_plantao
+  time_intervals:
+  # Mute das 8:00 as 12:00 e das 13:00 as 18:00 de segunda a sexta - horario deve ser preenchido utc
+  - times:
+    - start_time: "11:00"
+      end_time: "15:00"
+    - start_time: "16:00"
+      end_time: "21:00"
+    weekdays: ['monday:friday']
+    #weekdays: ['monday', 'tuesday', 'thursday', 'friday']
+
+### FIM  GERENCIAMENTO DE MUTE INTERVALS
+
+
+prometheus_msteams_connectors:
+- sre_msteams: "https://nddsa.webhook.office.com/webhookb2/a61202bc-6538-4e6e-b458-9596cc57224e@717144d2-6d9f-42a1-b56d-42afc3753ec3/IncomingWebhook/2d1f9c7897934f829caaefd216d3d806/86d9840c-7329-4beb-b4e9-8f6221d3a85f"
+- support_msteams: "https://nddsa.webhook.office.com/webhookb2/4bcb6680-a56a-4fbb-a5c6-1c7c3b0d6978@717144d2-6d9f-42a1-b56d-42afc3753ec3/IncomingWebhook/deb28d346f8f4c47ab965812578c7993/c95c7c84-d261-4c29-bf9a-d8dcd8c584e9"
+
+sachet_templates:
+- "{{ sachet_config_dir }}/telegram.tmpl"
+- "{{ sachet_config_dir }}/telegram-short.tmpl"
+
+sachet_providers:
+  telegram:
+    token: "1226791700:AAEkQSR2CfnQI16NcqKQxoC_UpZ-k0Se18A"
+
+sachet_receivers:
+- name: 'sre-team-telegram'
+  provider: 'telegram'
+  to: # the chat id of a user. Get yours at https://telegram.me/userinfobot
+  #- '1169058584' # William
+  - '1258790902' # Vinicius Matos
+  text: '{{ "{{" }}  template "telegram_message" . {{ "}}" }}'
+
+# FRETE TELEGRAM
+
+- name: 'frete-team-telegram'
+  provider: 'telegram'
+  to: # the chat id of a user. Get yours at https://telegram.me/userinfobot
+  # - '1202803478' # Douglas
+  - '5779892612' # Gabriel Pires
+  - '6000887212' # Plantão Frete
+  text: '{{ "{{" }}  template "telegram_message" . {{ "}}" }}'
+
+# CARGO
+
+- name: 'cargo-team-telegram'
+  provider: 'telegram'
+  to: # the chat id of a user. Get yours at https://telegram.me/userinfobot
+  # - '696601893' # Leonardo Nunes
+  # - '1419105131' # Vagner de Moraes
+  # - '2114592285' # Soraia da luz
+  - '1218218124' # Fernando Ben Hur 
+  # - '1258790902' # Vinicius Matos  
+  text: '{{ "{{" }}  template "telegram_message" . {{ "}}" }}'
+
+- name: 'move-team-telegram'
+  provider: 'telegram'
+  to: # the chat id of a user. Get yours at https://telegram.me/userinfobot
+  - '1218218124' # Fernando Ben Hur 
+  - '5779892612' # Gabriel Pires
+  - '1258790902' # Vinicius Matos  
+  text: '{{ "{{" }}  template "telegram_message" . {{ "}}" }}'
+
+
+# NFCE TELEGRAM
+
+- name: 'nfce-team-telegram'
+  provider: 'telegram'
+  to: # the chat id of a user. Get yours at https://telegram.me/userinfobot
+  - '1311238041' # Victor
+  - '5595444700' # Leticia
+  text: '{{ "{{" }}  template "telegram_message" . {{ "}}" }}'
+
+# PRINT TELEGRAM
+
+- name: 'print-team-telegram'
+  provider: 'telegram'
+  to: # the chat id of a user. Get yours at https://telegram.me/userinfobot
+  - '6036279756' # Moises Bittencourt
+  text: '{{ "{{" }}  template "telegram_message" . {{ "}}" }}'  
+
+
+# FIM TIMES DE TLEGRAM
+
+# JOBS FD
+
+prometheus_scrape_configs:
+
+### Job Federation une as bases oci x cotia, deve-se incluir o produto conforme abaixo
+
+- job_name: 'federate-skyview'
+  scrape_interval: 20s
+  scrape_timeout: 19s
+  honor_labels: true
+  metrics_path: '/federate'
+  params:
+    'match[]':
+      - '{produto="skyview"}'
+      - '{__name__=~"job:.*"}'
+  static_configs:
+    - targets:
+      - '138.94.211.13:9100'
+      labels:
+        produto: skyview
+        ambiente: skyview-cotia
+        env: prd
+        job: federate
+
+- job_name: 'federate-dcnfse'
+  scrape_interval: 20s
+  scrape_timeout: 19s
+  honor_labels: true
+  metrics_path: '/federate'
+  params:
+    'match[]':
+      - '{produto="dcnfse"}'
+      - '{__name__=~"job:.*"}'
+  static_configs:
+    - targets:
+      - '138.94.211.13:9100'
+      labels:
+        produto: skyview
+        ambiente: skyview-cotia
+        env: prd
+        job: federate
+
+- job_name: 'federate-orbix-am'
+  scrape_interval: 20s
+  scrape_timeout: 19s
+  honor_labels: true
+  metrics_path: '/federate'
+  params:
+    'match[]':
+      - '{produto="orbix",ambiente="orbix-am"}'
+      - '{__name__=~"job:.*"}'
+  static_configs:
+    - targets:
+      - '20.22.58.252:9090'
+      labels:
+        produto: orbix
+        ambiente: orbix-am
+        env: prd
+        job: federate        
+
+- job_name: 'federate-orbix-eu'
+  scrape_interval: 20s
+  scrape_timeout: 19s
+  honor_labels: true
+  metrics_path: '/federate'
+  params:
+    'match[]':
+      - '{produto="orbix",ambiente="orbix-eu"}'
+      - '{__name__=~"job:.*"}'
+  static_configs:
+    - targets:
+      - '20.79.140.50:9090'
+      labels:
+        produto: orbix
+        ambiente: orbix-eu
+        env: prd
+        job: federate   
+
+
+###
+
+- job_name: "file-servicediscovery"
+  scrape_interval: 20s
+  scrape_timeout: 19s
+  file_sd_configs:
+  - files:
+    - "{{ prometheus_config_dir }}/file_sd/*-targets.yml"
+    refresh_interval: 10m
+
+- job_name: "file-servicediscovery-1m"
+  scrape_interval: 1m
+  scrape_timeout: 59s
+  file_sd_configs:
+  - files:
+    - "{{ prometheus_config_dir }}/file_sd/*-targets-1m.yml"
+    refresh_interval: 10m
+
+- job_name: "file-servicediscovery-3m"
+  scrape_interval: 3m
+  scrape_timeout: 2m
+  file_sd_configs:
+  - files:
+    - "{{ prometheus_config_dir }}/file_sd/*-targets-3m.yml"
+    refresh_interval: 10m
+
+- job_name: "file-servicediscovery-5m"
+  scrape_interval: 5m
+  scrape_timeout: 2m
+  file_sd_configs:
+  - files:
+    - "{{ prometheus_config_dir }}/file_sd/*-targets-5m.yml"
+    refresh_interval: 60m
+  # relabel_configs:
+  #   - source_labels: []
+  #     target_label: 'data'
+  #     replacement: '(time - 86400) | formatTimestamp "2006-01-02"'
+  # Funciona, mas não realiza o calculo
+
+#  JOBS - BLACK BOX HTTP TCP_CONNECT
+# Este job está rodando no serviço blackbox_exporter_tcp.service
+
+- job_name: 'blackbox-tcp'
+  metrics_path: /probe
+  params:
+    module: [tcp_connect]
+  static_configs:
+
+# NDDMove TCP
+
+    - targets:
+      - polaris-dev.nddcargo.com.br:9002
+      labels:
+        severity: 'info'
+        ambiente: 'dev'
+        produto: 'nddmove'
+        aplicacao: 'Auth Mobile'
+        env: 'dev'
+        team: "nddmove_team" 
+
+    - targets:
+      - hmg-icomprova.nddcargo.com.br:9002
+      labels:
+        severity: 'info'
+        ambiente: 'hml'
+        produto: 'nddmove'
+        aplicacao: 'Auth Mobile'
+        env: 'hml'
+        team: "nddmove_team"         
+
+    - targets:
+      - icomprova.nddcargo.com.br:9002
+      labels:
+        severity: 'critical'
+        ambiente: 'prd'
+        produto: 'nddmove'
+        aplicacao: 'Auth Mobile'
+        env: 'prd'
+        team: "nddmove_team"  
+
+  relabel_configs:
+    - source_labels: [__address__]
+      target_label: __param_target
+    - source_labels: [__param_target]
+      target_label: instance
+    - target_label: __address__
+      replacement: 127.0.0.1:9116
+# FIM  JOB BLACKBOX-TCP
+
+#  JOBS - BLACK BOX HTTP 
+
+- job_name: 'blackbox'
+  metrics_path: /probe
+  params:
+    module: [http_2xx]
+  static_configs:
+
+# Skyview
+
+    - targets:      
+      - https://skyview.ndd.tech/api/health
+      labels:
+        severity: 'critical'
+        ambiente: 'skyview'
+        produto: 'skyview'
+        aplicacao: 'skyview'            
+        env: 'prd'
+        sre_team: "yes"
+
+    - targets:      
+      - http://20.22.58.252:9090/status
+      labels:
+        severity: 'critical'
+        ambiente: 'skyview'
+        produto: 'skyview'
+        aplicacao: 'prometheus-orbix-am'            
+        env: 'prd'
+        sre_team: "yes"  
+
+    - targets:      
+      - http://20.79.140.50:9090/status
+      labels:
+        severity: 'critical'
+        ambiente: 'skyview'
+        produto: 'skyview'
+        aplicacao: 'prometheus-orbix-eu'            
+        env: 'prd'
+        sre_team: "yes"
+
+    - targets:      
+      - http://138.94.211.13:9100/status
+      labels:
+        severity: 'critical'
+        ambiente: 'skyview'
+        produto: 'skyview'
+        aplicacao: 'prometheus-cotia'            
+        env: 'prd'
+        sre_team: "yes"
+
+    - targets:      
+      - https://skyview-labs.ndd.tech/api/health
+      labels:
+        severity: 'info'
+        ambiente: 'skyview-labs'
+        produto: 'skyview'
+        aplicacao: 'skyview-labs'            
+        env: 'labs'
+        sre_team: "no"        
+
+# Nigeria Totvs
+
+    - targets:
+      - https://wsngproxytotvs.fiscalneogrid.com/NGProxy/NGProxy.asmx
+      - https://wsngproxytotvs.fiscalneogrid.com/NGProxy/Integrator.asmx
+      - https://ngconnectortotvs.fiscalneogrid.com/Service.asmx
+      - https://portalmonitoramentototvs.fiscalneogrid.com/
+      - https://identitytotvs.fiscalneogrid.com/health
+
+      labels:
+        severity: 'critical'
+        ambiente: 'totvs'
+        env: prd
+        produto: 'nigeria'
+        support_team: "yes"
+        sre_team: "no"
+        sup24x7_team: "yes"
+        dev_team: "yes"     
+
+# Nigeria Neogrid
+
+    - targets:
+      - https://wsngproxyprod.fiscalneogrid.com/NGProxy/NGProxy.asmx
+      - https://wsngproxyprod.fiscalneogrid.com/NGProxy/Integrator.asmx
+      - https://ngconnectorprod.fiscalneogrid.com/Service.asmx
+      - https://portalmonitoramentoprod.fiscalneogrid.com
+      - https://identityprod.fiscalneogrid.com/health
+
+      labels:
+        severity: 'critical'
+        ambiente: 'neogrid'
+        env: prd
+        produto: 'nigeria'
+        support_team: "yes"
+        sre_team: "no"
+        sup24x7_team: "yes"
+        dev_team: "yes"  
+
+
+
+# Nigeria FastShop
+
+    - targets:
+      - https://portalmonitoramentofastshop.fiscalneogrid.com/
+      - https://identityfastshop.fiscalneogrid.com/health
+      labels:
+        severity: 'critical'
+        ambiente: 'fastshop'
+        env: 'prd'
+        produto: 'nigeria'        
+        support_team: "yes"
+        sre_team: "no"
+        sup24x7_team: "yes"
+        dev_team: "no"
+
+# Nigeria Cargill
+
+    - targets:
+      - https://portalmonitoramentocargill.fiscalneogrid.com/
+      - https://identitycargill.fiscalneogrid.com/health
+      labels:
+        severity: 'critical'
+        ambiente: 'cargill'
+        env: prd
+        produto: 'nigeria'
+        support_team: "yes"
+        sre_team: "no"
+        sup24x7_team: "yes"
+        dev_team: "no"    
+
+# Nigeria Neogrid - NFCe
+
+    - targets:
+      - https://nfce.fiscalneogrid.com/Neogrid_NFCeeMonitor/Account/Login
+      - https://nfce.fiscalneogrid.com/Neogrid_NFCeColdweb/Account/Login
+      - https://nfce.fiscalneogrid.com/eForms_NFCeSettingsWeb/#/login
+      - https://nfce.fiscalneogrid.com/eForms_WSNFCe/ExchangeMessage.asmx
+      labels:
+        severity: 'critical'
+        ambiente: 'neogrid-nfce'
+        env: 'prd'
+        produto: 'nigeria'        
+        support_team: "yes"
+        sre_team: "no"
+        sup24x7_team: "yes"
+        dev_team: "yes"
+
+
+# Nigeria HML
+
+    - targets:
+      - https://apiportalmonitoramentohomolog.fiscalneogrid.com/api/public/is-alive
+      - https://ngconnectorhomolog.fiscalneogrid.com/Service.asmx
+      - https://portalmonitoramentohomolog.fiscalneogrid.com/
+      - https://apiconectorhomolog.fiscalneogrid.com/index.html
+      labels:
+        severity: 'critical'
+        ambiente: 'nigeria-hml'
+        env: 'hml'
+        produto: 'nigeria'
+        support_team: "yes"
+        sre_team: "no"
+        sup24x7_team: "no"
+        dev_team: "yes"
+
+# Space
+
+    - targets:
+      - https://spaceportalprod.e-datacenter.nddigital.com.br/
+      - https://spaceapicentralsolucoesprod.e-datacenter.nddigital.com.br/index.html
+      - https://spaceapimonitoramentoprod.e-datacenter.nddigital.com.br/index.html
+      - https://spaceapiconfiguracaoprod.e-datacenter.nddigital.com.br/index.html
+      - https://spaceapilicenciamentoprod.e-datacenter.nddigital.com.br/index.html
+      - https://spaceapiintegracaoprod.e-datacenter.nddigital.com.br/index.html
+      - https://spaceapigeradorpdfprod.e-datacenter.nddigital.com.br
+      - https://spacenddidentityprod.e-datacenter.nddigital.com.br/
+      - https://spaceportalprod.e-datacenter.nddigital.com.br/integracao-gtve/api/Public/is-alive
+      - https://spaceportalprod.e-datacenter.nddigital.com.br/integracao-cte/api/Public/is-alive
+      - https://spaceportalprod.e-datacenter.nddigital.com.br/integracao-mdfe/api/Public/is-alive
+      - https://spaceportalprod.e-datacenter.nddigital.com.br/integracao-nfe/api/Public/is-alive
+      - https://spaceportalprod.e-datacenter.nddigital.com.br/integracao-dte/api/Public/is-alive
+      - https://spaceportalprod.e-datacenter.nddigital.com.br/integracao-nfse/api/Public/is-alive
+      - https://spaceportalprod.e-datacenter.nddigital.com.br/integracao-cteos/api/Public/is-alive
+      labels:
+        severity: 'critical'
+        ambiente: 'space'
+        produto: 'space'
+        env: 'prd'
+        sre_team: "no"
+        sup24x7_team: "yes"
+
+# DC NFCe
+
+    - targets:
+      - https://wsnfce.e-datacenter.nddigital.com.br/eForms_WSNFCe/ExchangeMessage.asmx
+      - https://eformsnfce.e-datacenter.nddigital.com.br/eForms_NFCeeMonitor/Account/Login
+      - https://eformsnfce.e-datacenter.nddigital.com.br/eForms_NFCeSettingsWeb/#/login
+      - https://eformsnfce.e-datacenter.nddigital.com.br/eForms_NFCeColdweb/Account/Login
+      - https://wsnfcerouter.e-datacenter.nddigital.com.br/eForms_WSNFCe/ExchangeMessage.asmx
+      - https://wsnfcerouter.e-datacenter.nddigital.com.br/WSConcentratorRouter
+      - https://wsnfcerouter2.e-datacenter.nddigital.com.br/WSConcentratorRouter
+      - https://proton.e-datacenter.nddigital.com.br/WSConcentratorRouter
+      - https://armpb.e-datacenter.nddigital.com.br/WSConcentratorRouter
+      - https://wsnfcerouter3.e-datacenter.nddigital.com.br/WSConcentratorRouter
+      - https://wsnfcerouter3.e-datacenter.nddigital.com.br/eForms_WSNFCe/ExchangeMessage.asmx
+      labels:
+        severity: 'critical'
+        ambiente: 'dcnfce'
+        aplicacao: nfce        
+        env: 'prd'
+        produto: 'nfce'        
+        nfce_team: "yes" 
+
+# Marisa
+
+    - targets:
+      - https://marisa.e-datacenter.nddigital.com.br/eForms_WSNFCe/ExchangeMessage.asmx
+      - https://marisa.e-datacenter.nddigital.com.br/eForms_NFCeeMonitor/Account/Login
+      - https://marisa.e-datacenter.nddigital.com.br/eForms_NFCeColdweb/Account/Login
+      - https://marisa.e-datacenter.nddigital.com.br/eForms_NFCeSettingsWeb/#/login
+      labels:
+        severity: 'critical'
+        ambiente: 'marisa'
+        env: 'prd'
+        produto: 'nfce'        
+        nfce_team: "yes" 
+
+# FastShop
+
+    - targets:
+      - https://fastshop.e-datacenter.nddigital.com.br/eForms_NFCeSettingsWeb/#/login
+      - https://fastshop.e-datacenter.nddigital.com.br/eForms_NFCeeMonitor/Account/Login
+      - https://fastshop.e-datacenter.nddigital.com.br/eForms_NFCeColdweb/Account/Login
+      - https://fastshop.e-datacenter.nddigital.com.br/eForms_WSNFCe/ExchangeMessage.asmx
+      labels:
+        severity: 'critical'
+        ambiente: 'fastshop'
+        env: 'prd'
+        produto: 'nfce'        
+        nfce_team: "yes" 
+
+# CEA
+
+    - targets:
+      - https://ceamodas.e-datacenter.nddigital.com.br/eForms_NFCeeMonitor/Account/Login
+      - https://ceamodas.e-datacenter.nddigital.com.br/eForms_NFCeColdweb/Account/Login
+      - https://ceamodas.e-datacenter.nddigital.com.br/eForms_NFCeSettingsWeb/#/login
+      - https://wsceamodas.e-datacenter.nddigital.com.br/WSConcentratorRouter
+      - https://wsceamodas.e-datacenter.nddigital.com.br/eForms_WSNFCe/ExchangeMessage.asmx
+      labels:
+        severity: 'critical'
+        ambiente: 'cea'
+        env: 'prd'
+        produto: 'nfce'        
+        nfce_team: "yes" 
+
+# Sirius    
+
+    - targets:
+      - https://siriusswagger.e-datacenter.nddigital.com.br/index.html
+      - https://domedatapublish-prod.azurewebsites.net
+      - https://hl-swagger.e-datacenter.nddigital.com.br/index.html
+      labels:
+        severity: 'critical'
+        ambiente: 'sirius'
+        env: 'prd'
+        produto: 'sirius'        
+        sirius_team: "yes" 
+  
+    - targets:
+      - https://dev-swagger.e-datacenter.nddigital.com.br/index.html
+      labels:
+        severity: 'critical'
+        ambiente: 'sirius-hml'
+        env: 'hml'
+        produto: 'sirius'        
+        sirius_team: "yes" 
+
+    - targets:
+      - https://dev-swagger.e-datacenter.nddigital.com.br/index.html
+      labels:
+        severity: 'critical'
+        ambiente: 'sirius-dev'
+        env: 'dev'
+        produto: 'sirius'        
+        sirius_team: "yes"      
+
+# Connect
+
+    - targets:
+      - http://nddconnectentry.e-datacenter.nddigital.com.br/EntradaFisica/Account/LogOn
+      - https://nddconnect.e-datacenter.nddigital.com.br/Auth/login
+      - https://nddconnect.e-datacenter.nddigital.com.br/configuration
+      - http://nddconnect.e-datacenter.nddigital.com.br/nddConnectWSExchange/ExchangeMessage.asmx
+      labels:
+        severity: 'critical'
+        ambiente: 'connect'
+        produto: 'connect'        
+        env: 'prd'
+        connect_team: "yes" 
+
+
+# Cargo
+
+    - targets:
+      - https://web.nddcargo.com.br/nddcargoapi/swagger/ui/index
+      - https://web.nddcargo.com.br/nddcargomobileapi/swagger/ui/index
+      - https://web.nddcargo.com.br/nddcargodatacenterapi/swagger/index.html
+      - https://web.nddcargo.com.br/apicentral/swagger/index.html
+      - https://web.nddcargo.com.br/nddcargochatbotapi/swagger/ui/index
+      - https://web.nddcargo.com.br/nddcargointegrationapi/swagger/index.html
+      - https://web.nddcargo.com.br/ms/Antt/swagger/index.html
+      - https://web.nddcargo.com.br/ms/Audit/swagger/index.html
+      - https://web.nddcargo.com.br/ms/Bank/swagger/index.html
+      - https://web.nddcargo.com.br/ms/BPP/swagger/index.html
+      - https://web.nddcargo.com.br/ms/Cards/swagger/index.html
+      - https://web.nddcargo.com.br/ms/CargoX/swagger/index.html
+      - https://web.nddcargo.com.br/ms/Carrier/swagger/index.html
+      - https://web.nddcargo.com.br/ms/Conductor/swagger/index.html
+      - https://web.nddcargo.com.br/ms/Contractor/swagger/index.html
+      - https://web.nddcargo.com.br/ms/Emails/swagger/index.html
+      - https://web.nddcargo.com.br/ms/FlashCourier/swagger/index.html
+      - https://web.nddcargo.com.br/ms/IssuePoint/swagger/index.html
+      - https://web.nddcargo.com.br/ms/Person/swagger/index.html
+      - https://web.nddcargo.com.br/ms/Route/swagger/index.html
+      - https://web.nddcargo.com.br/ms/Security/swagger/index.html
+      - https://web.nddcargo.com.br/ms/SemParar/swagger/index.html
+      - https://web.nddcargo.com.br/ms/Tmov/swagger/index.html
+      - https://web.nddcargo.com.br/ms/TollTicket/swagger/index.html
+      - https://web.nddcargo.com.br/ms/Users/swagger/index.html
+      - https://web.nddcargo.com.br/ms/Vehicles/swagger/index.html
+      - https://web.nddcargo.com.br/ms/Veloe/swagger/index.html
+      - https://web.nddcargo.com.br/wsagente/ExchangeMessage.asmx
+      - https://api-transporte.bpp.com.br
+      - https://wsagent.nddcargo.com.br/wsagente/ExchangeMessage.asmx?op=Ativo
+      labels:
+        severity: 'critical'
+        ambiente: 'cargo'
+        produto: 'cargo'
+        aplicacao: 'cargo'
+        env: 'prd'
+        cargo_team: "yes" 
+
+    - targets:
+      #- https://web.nddcargo.com.br/MS/Antecipation/api/public/is-alive
+      - https://web.nddcargo.com.br/MS/Antt/api/public/is-alive
+      - https://web.nddcargo.com.br/MS/Audit/api/public/is-alive
+      - https://web.nddcargo.com.br/MS/Auth/api/public/is-alive
+      - https://web.nddcargo.com.br/MS/Bank/api/public/is-alive
+      - https://web.nddcargo.com.br/MS/Bpp/api/public/is-alive
+      #- https://web.nddcargo.com.br/MS/CadastralValidation/api/public/is-alive
+      - https://web.nddcargo.com.br/MS/Cards/api/public/is-alive
+      - https://web.nddcargo.com.br/MS/CargoX/api/public/is-alive
+      - https://web.nddcargo.com.br/MS/Carrier/api/public/is-alive
+      - https://web.nddcargo.com.br/MS/Conductor/api/public/is-alive
+      - https://web.nddcargo.com.br/MS/Contractor/api/public/is-alive
+      - https://web.nddcargo.com.br/MS/Emails/api/public/is-alive
+      - https://web.nddcargo.com.br/MS/FlashCourier/api/public/is-alive
+      - https://web.nddcargo.com.br/MS/Frotabank/api/public/is-alive
+      - https://web.nddcargo.com.br/MS/Gateway/api/public/is-alive
+      - https://web.nddcargo.com.br/MS/IssuePoint/api/public/is-alive
+      - https://web.nddcargo.com.br/MS/Person/api/public/is-alive
+      - https://web.nddcargo.com.br/MS/Route/api/public/is-alive
+      - https://web.nddcargo.com.br/MS/Security/api/public/is-alive
+      - https://web.nddcargo.com.br/MS/SemParar/api/public/is-alive
+      - https://web.nddcargo.com.br/MS/Tmov/api/public/is-alive
+      - https://web.nddcargo.com.br/MS/TollTicket/api/public/is-alive
+      - https://web.nddcargo.com.br/MS/Users/api/public/is-alive
+      # - https://web.nddcargo.com.br/MS/UY3/api/public/is-alive
+      - https://web.nddcargo.com.br/MS/Veloe/api/public/is-alive
+      - https://web.nddcargo.com.br/MS/Webhook/api/public/is-alive
+      labels:
+        severity: 'critical'
+        ambiente: 'cargo'
+        produto: 'cargo'
+        aplicacao: MS
+        env: 'prd'
+        cargo_team: "yes"         
+
+    - targets:
+      - https://wsagent.nddcargo.com.br/wsagente/ExchangeMessage.asmx?op=Ativo
+      labels:
+        severity: 'critical'
+        ambiente: 'cargo'
+        aplicacao: 'wsagent'
+        produto: 'cargo'
+        env: 'prd'
+        cargo_team: "yes" 
+
+    - targets:
+      - https://web.nddcargo.com.br/nddcargoauth/api/public/is-alive
+      labels:
+        severity: 'critical'
+        ambiente: 'cargo'
+        aplicacao: 'Auth'
+        produto: 'cargo'
+        env: 'prd'
+        cargo_team: "yes" 
+
+    - targets:
+      - https://web.nddcargo.com.br/nddcargoapi/api/public/is-alive
+      labels:
+        severity: 'critical'
+        ambiente: 'cargo'
+        aplicacao: 'Portal API'
+        produto: 'cargo'
+        env: 'prd'
+        cargo_team: "yes" 
+
+    - targets:
+      - https://web.nddcargo.com.br/nddcargomobileapi/api/public/is-alive
+      labels:
+        severity: 'critical'
+        ambiente: 'cargo'
+        aplicacao: 'Mobile API'
+        produto: 'cargo'
+        env: 'prd'
+        cargo_team: "yes" 
+
+    # - targets:
+    #   - https://web.nddcargo.com.br/nddcargochatbotapi/api/public/is-alive
+    #   labels:
+    #     severity: 'critical'
+    #     ambiente: 'cargo'
+    #     aplicacao: 'Chatbot API'
+    #     produto: 'cargo'
+    #     env: 'prd'
+    #     cargo_team: "yes" 
+
+    - targets:
+      - https://web.nddcargo.com.br/nddcargosupplyapi/api/public/is-alive
+      labels:
+        severity: 'critical'
+        ambiente: 'cargo'
+        aplicacao: 'ProFrotas API'
+        produto: 'cargo'
+        env: 'prd'
+        cargo_team: "no"
+
+    - targets:
+      - https://web.nddcargo.com.br/nddcargodatacenterapi/api/public/is-alive
+      labels:
+        severity: 'critical'
+        ambiente: 'cargo'
+        aplicacao: 'ProFrotas API'
+        produto: 'cargo'
+        env: 'prd'
+        cargo_team: "yes" 
+
+    - targets:
+      - https://web.nddcargo.com.br/nddcargodatacenterapi/api/public/is-alive
+      labels:
+        severity: 'critical'
+        ambiente: 'cargo'
+        aplicacao: 'Integration API'
+        produto: 'cargo'
+        env: 'prd'
+        cargo_team: "yes"         
+
+# Frete policies
+
+    - targets:
+      - https://nddfrete-prd.e-datacenter.nddigital.com.br/
+      - https://nddfrete-pol-prd.e-datacenter.nddigital.com.br/index.html
+      - https://nddfrete-policies-prd.e-datacenter.nddigital.com.br/index.html
+      - https://nddfrete-prd-storage.e-datacenter.nddigital.com.br/index.html
+      - https://nddfrete-prd-approval.e-datacenter.nddigital.com.br/index.html
+      - https://nddfrete-integration-prd.e-datacenter.nddigital.com.br/index.html
+      - https://nddfrete-policies.e-datacenter.nddigital.com.br/index.html
+      - https://nddfrete-policies-ad.e-datacenter.nddigital.com.br/index.html
+      labels:
+        severity: 'critical'
+        ambiente: 'frete-policies'
+        produto: 'frete'
+        env: 'prd'
+        frete_team: "yes" 
+
+# Frete 
+
+    - targets:
+      - https://suzano-oci-emissor.e-datacenter.nddigital.com.br/Login
+      
+      labels:
+        severity: 'critical'
+        ambiente: 'Suzano'
+        produto: 'frete'
+        env: 'prd'
+        frete_team: "yes"         
+
+    - targets:
+      - https://emissorpenske-orc.e-datacenter.nddigital.com.br
+      labels:
+        severity: 'critical'
+        ambiente: 'Penske'
+        produto: 'frete'
+        env: 'prd'
+        frete_team: "yes"   
+
+    - targets:
+      - https://nddfrete-hmg.e-datacenter.nddigital.com.br/
+      - https://nddfrete-pol-hmg.e-datacenter.nddigital.com.br/index.html
+      - https://nddfrete-policies-hmg.e-datacenter.nddigital.com.br/index.html
+      - https://nddfrete-hmg-storage.e-datacenter.nddigital.com.br/index.html
+      - https://nddfrete-hmg-approval.e-datacenter.nddigital.com.br/index.html
+      - https://nddfrete-integration-hmg.e-datacenter.nddigital.com.br/index.html
+
+      labels:
+        severity: 'warning'
+        ambiente: 'frete-policies-hml'
+        produto: 'frete'
+        env: 'hml'
+        frete_team: "yes" 
+
+# DC NFSe
+
+
+# UNIASSELVI
+    - targets:
+      - https://nfsecustom.e-datacenter.nddigital.com.br/nfsemonitor/#/page/login
+      labels:
+        severity: 'critical'
+        ambiente: 'uniasselvi'
+        produto: 'dcnfse'
+        aplicacao: 'nfsemonitor'
+        env: 'prd'
+        team: "dcnfse_team" 
+
+    - targets:
+      - https://nfsecustom.e-datacenter.nddigital.com.br/nfsecoldweb/#/page/login
+      labels:
+        severity: 'critical'
+        ambiente: 'uniasselvi'
+        produto: 'dcnfse'
+        aplicacao: 'nfsecoldweb'
+        env: 'prd'
+        team: "dcnfse_team"         
+
+# LINX
+    - targets:
+      - https://nfselinx.e-datacenter.nddigital.com.br/nfsemonitor/#/page/login
+      labels:
+        severity: 'critical'
+        ambiente: 'linx'
+        produto: 'dcnfse'
+        aplicacao: 'nfsemonitor'
+        env: 'prd'
+        team: "dcnfse_team" 
+
+
+# # RECORD
+#     - targets:
+#       - http://BR-OCI-REC01.DCNDD.LOCAL/nfsemonitor/#/page/login
+#       labels:
+#         severity: 'critical'
+#         ambiente: 'record'
+#         produto: 'dcnfse'
+#         aplicacao: nfsemonitor
+#         env: 'prd'
+#         team: "dcnfse_team" 
+
+
+#  FLEURY
+    - targets:
+      - https://fleurypd.e-datacenter.nddigital.com.br/NFSeMonitor/#/page/login
+      labels:
+        severity: 'critical'
+        ambiente: 'fleury'
+        produto: 'dcnfse'
+        aplicacao: nfsemonitor
+        env: 'prd'
+        team: "dcnfse_team" 
+
+    - targets:
+      - https://fleurypd.e-datacenter.nddigital.com.br/nfsecoldweb/#/page/login
+      labels:
+        severity: 'critical'
+        ambiente: 'fleury'
+        produto: 'dcnfse'
+        aplicacao: nfsecoldweb
+        env: 'prd'
+        team: "dcnfse_team"         
+
+
+#  ACCOR
+    - targets:
+      - https://accor-nfse.e-datacenter.nddigital.com.br/NFSemonitor/#/page/login
+      labels:
+        severity: 'critical'
+        ambiente: 'accor'
+        produto: 'dcnfse'
+        aplicacao: nfsemonitor
+        env: 'prd'
+        team: "dcnfse_team" 
+
+    - targets:
+      - https://accor-nfse.e-datacenter.nddigital.com.br/NFSeColdWeb/#/page/login
+      labels:
+        severity: 'critical'
+        ambiente: 'accor'
+        produto: 'dcnfse'
+        aplicacao: nfsecoldweb
+        env: 'prd'
+        team: "dcnfse_team"   
+
+#### DC Marelli
+
+    - targets:
+      - https://marelli-emissao.e-datacenter.nddigital.com.br/eFormseMonitor/Account/Login
+      - https://marelli-recepcao.e-datacenter.nddigital.com.br/eFormseMonitor/Account/Login
+      labels:
+        severity: 'critical'
+        ambiente: 'marelli'
+        produto: 'edatacenter'
+        env: 'prd'
+        team: "edatacenter_team"         
+
+
+# PRINT
+
+#### 360
+
+    - targets:
+      - http://wscontrol.nddprint.com/nCWS_5/Credentials.asmx
+      - http://wscontrol.nddprint.com/nCWS_5/Policies.asmx
+      - http://wscontrol.nddprint.com/nCWS_5/Quotas.asmx
+      - http://wsembedded.nddprint.com/nEWS_5/FilesTransfer.asmx
+      - http://wsnpl.nddprint.com/nHWS_5/FilesTransfer.asmx
+      - https://new360.nddprint.com/login/company
+      - https://wscontrol.nddprint.com/nCWS_5/Releaser.asmx
+      - https://wsmobile.nddprint.com/nMWS_5/Mobile.asmx
+      - https://wsnsu.nddprint.com/nCWS_5/Credentials.asmx
+      - https://wsnsu.nddprint.com/nCWS_5/Policies.asmx
+      - https://wsnsu.nddprint.com/nCWS_5/Quotas.asmx
+      - https://wsnsu.nddprint.com/nCWS_5/Releaser.asmx
+      - https://sync-host.nddprint.com/
+      - https://sync-host.nddprint.com/sync-host-api/api/status
+      labels:
+        severity: 'critical'
+        ambiente: 'DCBR1'
+        aplicacao: '360'
+        produto: 'nddprint'
+        env: 'prd'
+        team: "print_team"
+
+
+#### PRINT
+
+    - targets:
+      - https://wsgeneral.nddprint.com/HangfireDashboard
+      - http://kb.nddprint.com/kbWS_1/PrintersKB.svc
+      - http://licenses.nddprint.com/auth/login
+      - http://newcompany.nddprint.com/createenterprise
+      - https://mps.nddprint.com/?Token=C74D9D3B-098E-4917-BBF1-E3A26D59009F
+      - http://wsnpl.nddprint.com/nHCWS_5/ConfigsTransfer.asmx
+      - https://api-contracts.nddprint.com/ContractsWS/ContractsData.asmx
+      - https://api-contracts.nddprint.com/CountersWS/CountersData.asmx
+      - https://api-counters.nddprint.com/CountersWS/CountersData.asmx
+      - https://api-events.nddprint.com/EventsWS/EventsData.asmx
+      - https://api-general.nddprint.com/ContractsWS/ContractsData.asmx
+      - https://api-general.nddprint.com/GeneralWS/GeneralData.asmx
+      - https://api-general.nddprint.com/GeneralWS/GeneralData2.asmx
+      - https://api-general.nddprint.com/MPSEventsNotification/EventsWS.asmx
+      - https://api-general.nddprint.com/MPSOrdersNotification/OrdersWS.asmx
+      - https://api-general.nddprint.com/OnDemandWS/OnDemandData.asmx
+      - https://api-printjobs.nddprint.com/PrintJobsWS/PrintJobsData.asmx
+      - https://api-printjobs.nddprint.com/QuotasWS/QuotasData.asmx
+      - https://api-quotas.nddprint.com/QuotasWS/QuotasData.asmx
+      - https://api-servicesdesk.nddprint.com/MPSPartnerData/PartnersData.asmx
+      - https://api-stockorders.nddprint.com/StockOrdersWS/StockOrdersData.asmx
+      - https://api-supplierorders.nddprint.com/SupplierOrdersWS/SupplierOrdersData.asmx
+      - https://hubs.nddprint.com/PrintHostsHub/Index.aspx
+      - https://kb.nddprint.com/Kbviewer
+      - https://kb.nddprint.com/KBViewerWS/
+      - https://mps.nddprint.com
+      - https://mps.nddprint.com/mpsreports/Default.aspx
+      - https://resources.nddprint.com/downloads
+      - https://services.nddprint.com
+      - https://services.nddprint.com/#/login
+      - https://wsgeneral.nddprint.com/EventsWS/EventsData.asmx
+      - https://wsgeneral.nddprint.com/GeneralWS/GeneralData.asmx
+      - https://wsgeneral.nddprint.com/GeneralWS/GeneralData2.asmx
+      - https://wsgeneral.nddprint.com/MPSEventsNotification/EventsWS.asmx
+      - https://wsgeneral.nddprint.com/MPSOrdersNotification/OrdersWS.asmx
+      - https://wsgeneral.nddprint.com/MPSPartnerData/PartnersData.asmx
+      - https://wsgeneral.nddprint.com/OnDemandWS/OnDemandData.asmx
+      - https://wsgeneral.nddprint.com/ServicesDeskWS/ServicesDeskData.asmx
+      - https://wsgeneral.nddprint.com/WSControlPortal
+      - https://wsnpa.nddprint.com/nAWS_5/FilesTransfer.asmx
+      - https://services.nddprint.com/serviceportalapi/api/parameters/urls
+      - https://api-printhosts.nddprint.com/PrintHostsWS/PrintHostsData.asmx
+      - https://wsgeneral.nddprint.com/HangfireDashboard/
+      - https://ndd-reports.nddprint.com
+      - https://api2-contracts.nddprint.com/ContractsWS/ContractsData.asmx
+      - https://api2-counters.nddprint.com/CountersWS/CountersData.asmx
+      - https://api2-general.nddprint.com/GeneralWS/GeneralData.asmx
+      - https://api2-general.nddprint.com/GeneralWS/GeneralData2.asmx      
+
+      labels:
+        severity: 'critical'
+        ambiente: 'DCBR1'   
+        aplicacao: 'MPS'
+        produto: 'nddprint'
+        env: 'prd'
+        team: "print_team"
+
+# NDD move dev
+
+    - targets:
+      - https://polaris-dev.nddcargo.com.br:9000
+      labels:
+        severity: 'info'
+        ambiente: 'dev'
+        produto: 'nddmove'
+        aplicacao: 'Swagger Portal'
+        env: 'dev'
+        team: "nddmove_team" 
+
+    - targets:
+      - https://polaris-dev.nddcargo.com.br:9003
+      labels:
+        severity: 'info'
+        ambiente: 'dev'
+        produto: 'nddmove'
+        aplicacao: 'Swagger Empresa'
+        env: 'dev'
+        team: "nddmove_team"                         
+
+    - targets:
+      - https://polaris-dev.nddcargo.com.br:9001/index.html
+      labels:
+        severity: 'info'
+        ambiente: 'dev'
+        produto: 'nddmove'
+        aplicacao: 'Swagger Mobile'
+        env: 'dev'
+        team: "nddmove_team"
+
+    - targets:
+      - https://polaris-dev.nddcargo.com.br:9004
+      labels:
+        severity: 'info'
+        ambiente: 'dev'
+        produto: 'nddmove'
+        aplicacao: 'Registrar Empresa'
+        env: 'dev'
+        team: "nddmove_team"
+        
+    - targets:
+      - https://polaris-dev.nddcargo.com.br:9051 
+      labels:
+        severity: 'info'
+        ambiente: 'dev'
+        produto: 'nddmove'
+        aplicacao: 'NDD Identity'
+        env: 'dev'
+        team: "nddmove_team"
+
+    - targets:
+      - http://polaris-dev.nddcargo.com.br:15672
+      labels:
+        severity: 'info'
+        ambiente: 'dev'
+        produto: 'nddmove'
+        aplicacao: 'Portal Rabbitmq'
+        env: 'dev'
+        team: "nddmove_team"                               
+
+    - targets:
+      - http://polaris-dev.nddcargo.com.br:8999
+      labels:
+        severity: 'info'
+        ambiente: 'dev'
+        produto: 'nddmove'
+        aplicacao: 'Portainer'
+        env: 'dev'
+        team: "nddmove_team"
+    
+# NDD move homolog
+
+    - targets:
+      - https://hmg-icomprova.nddcargo.com.br:9000
+      labels:
+        severity: 'info'
+        ambiente: 'hml'
+        produto: 'nddmove'
+        aplicacao: 'Swagger Portal'
+        env: 'hml'
+        team: "nddmove_team" 
+
+    - targets:
+      - https://hmg-icomprova.nddcargo.com.br:9003
+      labels:
+        severity: 'info'
+        ambiente: 'hml'
+        produto: 'nddmove'
+        aplicacao: 'Swagger Empresa'
+        env: 'hml'
+        team: "nddmove_team"                         
+
+    - targets:
+      - https://hmg-icomprova.nddcargo.com.br:9001/index.html
+      labels:
+        severity: 'info'
+        ambiente: 'hml'
+        produto: 'nddmove'
+        aplicacao: 'Swagger Mobile'
+        env: 'hml'
+        team: "nddmove_team"
+
+    - targets:
+      - https://hmg-icomprova.nddcargo.com.br:9004
+      labels:
+        severity: 'info'
+        ambiente: 'hml'
+        produto: 'nddmove'
+        aplicacao: 'Registrar Empresa'
+        env: 'hml'
+        team: "nddmove_team"
+        
+    - targets:
+      - https://hmg-icomprova.nddcargo.com.br:9051 
+      labels:
+        severity: 'info'
+        ambiente: 'hml'
+        produto: 'nddmove'
+        aplicacao: 'NDD Identity'
+        env: 'hml'
+        team: "nddmove_team"
+
+    - targets:
+      - http://hmg-icomprova.nddcargo.com.br:15672
+      labels:
+        severity: 'info'
+        ambiente: 'hml'
+        produto: 'nddmove'
+        aplicacao: 'Portal Rabbitmq'
+        env: 'hml'
+        team: "nddmove_team"                               
+
+    - targets:
+      - http://hmg-icomprova.nddcargo.com.br:8999
+      labels:
+        severity: 'info'
+        ambiente: 'hml'
+        produto: 'nddmove'
+        aplicacao: 'Portainer'
+        env: 'hml'
+        team: "nddmove_team"
+
+# NDD move produção
+
+    - targets:
+      - https://icomprova.nddcargo.com.br:9000
+      labels:
+        severity: 'critical'
+        ambiente: 'prd'
+        produto: 'nddmove'
+        aplicacao: 'Swagger Portal'
+        env: 'prd'
+        team: "nddmove_team" 
+
+    - targets:
+      - https://icomprova.nddcargo.com.br:9003
+      labels:
+        severity: 'critical'
+        ambiente: 'prd'
+        produto: 'nddmove'
+        aplicacao: 'Swagger Empresa'
+        env: 'prd'
+        team: "nddmove_team"                         
+
+    - targets:
+      - https://icomprova.nddcargo.com.br:9001/index.html
+      labels:
+        severity: 'critical'
+        ambiente: 'prd'
+        produto: 'nddmove'
+        aplicacao: 'Swagger Mobile'
+        env: 'prd'
+        team: "nddmove_team"
+
+    - targets:
+      - https://icomprova.nddcargo.com.br:9004
+      labels:
+        severity: 'critical'
+        ambiente: 'prd'
+        produto: 'nddmove'
+        aplicacao: 'Registrar Empresa'
+        env: 'prd'
+        team: "nddmove_team"
+        
+    - targets:
+      - https://icomprova.nddcargo.com.br:9051 
+      labels:
+        severity: 'critical'
+        ambiente: 'prd'
+        produto: 'nddmove'
+        aplicacao: 'NDD Identity'
+        env: 'prd'
+        team: "nddmove_team"
+
+    - targets:
+      - http://icomprova.nddcargo.com.br:15672
+      labels:
+        severity: 'critical'
+        ambiente: 'prd'
+        produto: 'nddmove'
+        aplicacao: 'Portal Rabbitmq'
+        env: 'prd'
+        team: "nddmove_team"                               
+
+    - targets:
+      - http://icomprova.nddcargo.com.br:9999
+      labels:
+        severity: 'critical'
+        ambiente: 'prd'
+        produto: 'nddmove'
+        aplicacao: 'Portainer'
+        env: 'prd'
+        team: "nddmove_team"        
+
+           
+################################### Validação #############################
+    # - targets:      
+    #   - https://ndd.tech/halth
+    #   - https://skyview.ndd.tech
+    #   - https://ndd.tech
+    #   labels:
+    #     severity: 'info'
+    #     ambiente: 'skyview-hml'
+    #     env: 'hml'
+    #     sre_team: "yes"
+
+#########################################################################
+
+  relabel_configs:
+    - source_labels: [__address__]
+      target_label: __param_target
+    - source_labels: [__param_target]
+      target_label: instance
+    - target_label: __address__
+      replacement: 127.0.0.1:9115
+# FIM  JOB BLACKBOX

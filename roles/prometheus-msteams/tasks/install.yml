@@ -1,0 +1,49 @@
+---
+
+- name: create prometheus-msteams system group
+  group:
+    name: "{{ _prometheus_msteams_system_group }}"
+    system: true
+    state: present
+
+- name: create prometheus-msteams system user
+  user:
+    name: "{{ _prometheus_msteams_system_user }}"
+    system: true
+    shell: "/sbin/nologin"
+    group: "{{ _prometheus_msteams_system_group }}"
+    createhome: false
+
+- name: create prometheus-msteams directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ _prometheus_msteams_system_user }}"
+    group: "{{ _prometheus_msteams_system_group }}"
+    mode: 0755
+  with_items:
+    - "{{ prometheus_msteams_config_dir }}"
+
+- name: install prometheus-msteams
+  block:
+    - name: download prometheus-msteams binary to local folder
+      become: false
+      get_url:
+        url: "https://github.com/prometheus-msteams/prometheus-msteams/releases/download/v{{ prometheus_msteams_version }}/prometheus-msteams-linux-amd64"
+        dest: "/tmp/prometheus-msteams-linux-amd64"
+      register: _download_archive
+      until: _download_archive is succeeded
+      retries: 5
+      delay: 2
+      # run_once: true # <-- this can't be set due to multi-arch support
+      delegate_to: localhost
+      check_mode: false
+
+- name: propagate locally distributed prometheus-msteams
+  copy:
+    src: /tmp/prometheus-msteams-linux-amd64
+    dest: "{{ _prometheus_msteams_binary_install_dir }}/prometheus-msteams"
+    mode: 0755
+    owner: root
+    group: root
+  notify: restart prometheus-msteams

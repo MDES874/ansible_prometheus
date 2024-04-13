@@ -1,0 +1,1070 @@
+### NEOGRID
+- labels:
+    job: rabbitmq
+    ambiente: neogrid
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGRBT08.dcndd.local:15692
+  - BR-OCI-NIGRBT08.dcndd.local:9100
+  - BR-OCI-NIGRBT09.dcndd.local:15692
+  - BR-OCI-NIGRBT09.dcndd.local:9100
+  - BR-OCI-NIGRBT10.dcndd.local:15692
+  - BR-OCI-NIGRBT10.dcndd.local:9100  
+
+# - labels:
+#     job: windows_exporter # Estatisticas Sistema Operacional
+#     ambiente: neogrid
+#     hostname: BR-OCI-NIG01
+#     aplicacao: gw
+#     env: prd
+#     produto: 'nigeria'
+#   targets:
+#   - BR-OCI-NIG01.dcndd.local:9182 # GW - Neogrid
+
+- labels:
+    job: windows_exporter # Estatisticas Sistema Operacional
+    ambiente: neogrid
+    hostname: BR-OCI-NIG02
+    aplicacao: api
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIG02.dcndd.local:9182 # API PORTAIS - Neogrid
+
+- labels:
+    job: windows_exporter # Estatisticas Sistema Operacional
+    ambiente: neogrid
+    hostname: BR-OCI-NIG03
+    aplicacao: passivo
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIG03.dcndd.local:9182 # PASSIVO - Neogrid
+- labels:
+    job: windows_exporter # Estatisticas Sistema Operacional
+    ambiente: neogrid
+    hostname: BR-OCI-NIG04
+    aplicacao: ws
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIG04.dcndd.local:9182 # WS - Neogrid
+
+- labels:
+    job: windows_exporter # Estatisticas Sistema Operacional
+    ambiente: neogrid
+    hostname: BR-OCI-NIG05
+    aplicacao: nfse-hosts
+    env: prd
+    produto: 'nigeria'
+  targets:
+
+  - BR-OCI-NIG05.dcndd.local:9182 # NODO A - Legado NFSE e Hosts - Neogrid
+- labels:
+    job: windows_exporter # Estatisticas Sistema Operacional
+    ambiente: neogrid
+    hostname: BR-OCI-NIG11
+    aplicacao: nfse-hosts
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIG11.dcndd.local:9182 # NODO B - Legado NFSE e Hosts - Neogrid
+
+- labels:
+    job: windows_exporter # Estatisticas Sistema Operacional
+    ambiente: neogrid
+    hostname: BR-OCI-NIG07
+    aplicacao: nfe
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIG07.dcndd.local:9182 # NODO A - Legado NFE - Neogrid
+
+- labels:
+    job: windows_exporter # Estatisticas Sistema Operacional
+    ambiente: neogrid
+    hostname: BR-OCI-NIG08
+    aplicacao: nfe
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIG08.dcndd.local:9182 # NODO B - Legado NFE - Neogrid
+
+- labels:
+    job: windows_exporter # Estatisticas Sistema Operacional
+    ambiente: neogrid
+    hostname: BR-OCI-NIG09
+    aplicacao: cte-mdfe
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIG09.dcndd.local:9182 # NODO A - eForms CTe/MDFe - Neogrid
+
+- labels:
+    job: windows_exporter # Estatisticas Sistema Operacional
+    ambiente: neogrid
+    hostname: BR-OCI-NIG10
+    aplicacao: cte-mdfe
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIG10.dcndd.local:9182 # NODO B - eForms CTe/MDFe - Neogrid
+
+
+# Neogrid NFCE
+
+- labels:
+    job: NDD-Mssql-Statistic-NFCe-Geral # Estastisticas banco negocio
+    ambiente: 'neogrid-nfce'
+    hostname: BR-OCI-NIG01
+    aplicacao: nfce
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIG01.dcndd.local:7501 # NDDMssqlStatistic_NFCe Geral
+
+- labels:
+    job: node-Mssql-NFCe # Estatisticas SO banco
+    ambiente: 'neogrid-nfce'
+    hostname: BR-OCI-NNFCDBL1
+    aplicacao: nfce
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NNFCDBL1.dcndd.local:9100 # Estatistica SO 
+
+- labels:
+    job: windows_exporter_nfce # Estatisticas Sistema Operacional
+    ambiente: 'neogrid-nfce'
+    hostname: BR-OCI-NNFCE01
+    aplicacao: nfce
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NNFCE01.dcndd.local:9182 
+
+- labels:
+    job: windows_exporter_nfce # Estatisticas Sistema Operacional
+    ambiente: 'neogrid-nfce'
+    hostname: BR-OCI-NNFCE02
+    aplicacao: nfce
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NNFCE02.dcndd.local:9182 
+
+
+# Neogrid Monitoramento Banco by ambiente monitoring docker
+################### Resources ###################
+
+- labels:
+    job: NDD-Mssql-Resources-DB-01
+    ambiente: neogrid
+    hostname: BR-OCI-NIGDB01
+    aplicacao: db-01
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7054 # monitoring
+
+- labels:
+    job: NDD-Mssql-Resources-DB-02
+    ambiente: neogrid
+    hostname: BR-OCI-NIGDB02
+    aplicacao: db-02
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7055 # monitoring 
+
+- labels:
+    job: NDD-Mssql-Resources-DB-03
+    ambiente: neogrid
+    hostname: BR-OCI-NIGDB03
+    aplicacao: db-03
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7056 # monitoring
+  
+- labels:
+    job: NDD-Mssql-Resources-DB-04
+    ambiente: neogrid
+    hostname: BR-OCI-NIGDB04
+    aplicacao: db-04
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7057 # monitoring
+  
+
+################################################
+
+################### Negocios ###################
+
+- labels:
+    job: NDD-Mssql-Negocio-NDD-APP
+    ambiente: neogrid
+    hostname: BR-OCI-NIGDB01
+    aplicacao: NDD_APP
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7102 # monitoring 
+
+- labels:
+    job: NDD-Mssql-Negocio-NDD-CENTRALFRONT
+    ambiente: neogrid
+    hostname: BR-OCI-NIGDB01
+    aplicacao: NDD_CENTRALFRONT
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7202 # monitoring 
+
+- labels:
+    job: NDD-Mssql-Negocio-NDD-CONNECTOR_CTeMDFe
+    ambiente: neogrid
+    hostname: BR-OCI-NIGDB03
+    aplicacao: NDD_CONNECTOR
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7302 # monitoring 
+
+- labels:
+    job: NDD-Mssql-Negocio-NDD-CONNECTOR_NFe
+    ambiente: neogrid
+    hostname: BR-OCI-NIGDB03
+    aplicacao: NDD_CONNECTOR
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7402 # monitoring 
+
+- labels:
+    job: NDD-Mssql-Negocio-NDD-NFSE
+    ambiente: neogrid
+    hostname: BR-OCI-NIGDB03
+    aplicacao: NDD_NFSE
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7502 # monitoring  
+
+- labels:
+    job: NDD-Mssql-Negocio-NDD-TRANSACOES
+    ambiente: neogrid
+    hostname: BR-OCI-NIGDB02
+    aplicacao: NDD_TRANSACOES
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7602 # monitoring 
+
+### TOTVS
+
+- labels:
+    job: rabbitmq
+    ambiente: totvs
+    env: prd
+    produto: 'nigeria'    
+  targets:
+  # - BR-OCI-NTOTVSL2.dcndd.local:15692
+  # - BR-OCI-NTOTVSL2.dcndd.local:9100
+  # - BR-OCI-NTOTVSL3.dcndd.local:15692
+  # - BR-OCI-NTOTVSL3.dcndd.local:9100
+  # - BR-OCI-NTOTVSL4.dcndd.local:15692
+  # - BR-OCI-NTOTVSL4.dcndd.local:9100
+  - BR-OCI-NTOTVSL5.dcndd.local:15692
+  - BR-OCI-NTOTVSL5.dcndd.local:9100
+  - BR-OCI-NTOTVSL6.dcndd.local:15692
+  - BR-OCI-NTOTVSL6.dcndd.local:9100
+  - BR-OCI-NTOTVSL7.dcndd.local:15692
+  - BR-OCI-NTOTVSL7.dcndd.local:9100  
+
+- labels:
+    job: windows_exporter # Estatisticas Sistema Operacional
+    hostname: BR-OCI-NTOTVS02
+    aplicacao: passivo
+    ambiente: totvs
+    env: prd
+    produto: 'nigeria'    
+  targets:
+  - BR-OCI-NTOTVS02.dcndd.local:9182 # PASSIVO - totvs
+- labels:
+    job: windows_exporter # Estatisticas Sistema Operacional
+    hostname: BR-OCI-NTOTVS03
+    aplicacao: ws
+    ambiente: totvs
+    env: prd
+    produto: 'nigeria'    
+  targets:
+  - BR-OCI-NTOTVS03.dcndd.local:9182 # WS - totvs
+- labels:
+    job: windows_exporter # Estatisticas Sistema Operacional
+    hostname: BR-OCI-NTOTVS04
+    aplicacao: nfse-hosts
+    ambiente: totvs
+    env: prd
+    produto: 'nigeria'    
+  targets:
+  - BR-OCI-NTOTVS04.dcndd.local:9182 # NODO A - Legado NFSE e Hosts - totvs
+- labels:
+    job: windows_exporter # Estatisticas Sistema Operacional
+    hostname: BR-OCI-NTOTVS05
+    aplicacao: nfse-hosts
+    ambiente: totvs
+    env: prd
+    produto: 'nigeria'    
+  targets:
+  - BR-OCI-NTOTVS05.dcndd.local:9182 # NODO B - Legado NFSE e Hosts - totvs
+- labels:
+    job: windows_exporter # Estatisticas Sistema Operacional
+    hostname: BR-OCI-NTOTVS06
+    aplicacao: nfe
+    ambiente: totvs
+    env: prd
+    produto: 'nigeria'    
+  targets:
+  - BR-OCI-NTOTVS06.dcndd.local:9182 # NODO A - Legado NFE email entry - totvs
+
+- labels:
+    job: windows_exporter # Estatisticas Sistema Operacional
+    hostname: BR-OCI-NTOTVS14
+    aplicacao: nfe
+    ambiente: totvs
+    env: prd
+    produto: 'nigeria'    
+  targets:
+  - BR-OCI-NTOTVS14.dcndd.local:9182 # NODO A - Legado NFE email entry - totvs
+
+- labels:
+    job: windows_exporter # Estatisticas Sistema Operacional
+    hostname: BR-OCI-NTOTVS07
+    aplicacao: nfe
+    ambiente: totvs
+    env: prd
+    produto: 'nigeria'    
+  targets:
+  - BR-OCI-NTOTVS07.dcndd.local:9182 # NODO B - Legado NFE email entry - totvs
+- labels:
+    job: windows_exporter # Estatisticas Sistema Operacional
+    hostname: BR-OCI-NTOTVS08
+    aplicacao: cte-mdfe
+    ambiente: totvs
+    env: prd
+    produto: 'nigeria'    
+  targets:
+  - BR-OCI-NTOTVS08.dcndd.local:9182 # NODO A - eForms CTe/MDFe - totvs
+- labels:
+    job: windows_exporter # Estatisticas Sistema Operacional
+    hostname: BR-OCI-NTOTVS09
+    aplicacao: cte-mdfe
+    ambiente: totvs
+    env: prd
+    produto: 'nigeria'    
+  targets:
+  - BR-OCI-NTOTVS09.dcndd.local:9182 # NODO B - eForms CTe/MDFe - totvs
+- labels:
+    job: windows_exporter # Estatisticas Sistema Operacional
+    hostname: BR-OCI-NTOTVS11
+    aplicacao: hosts-extra
+    ambiente: totvs
+    env: prd
+    produto: 'nigeria'      
+  targets:
+  - BR-OCI-NTOTVS11.dcndd.local:9182 # Servidor de Host Extra
+
+- labels:
+    job: windows_exporter # Estatisticas Sistema Operacional
+    hostname: BR-OCI-NTOTVS12
+    aplicacao: hosts-extra
+    ambiente: totvs
+    env: prd
+    produto: 'nigeria'    
+  targets:
+  - BR-OCI-NTOTVS12.dcndd.local:9182 # Servidor de Host Extra
+
+- labels:
+    job: windows_exporter # Estatisticas Sistema Operacional
+    hostname: BR-OCI-NTOTVS13
+    aplicacao: hosts-extra
+    ambiente: totvs
+    env: prd
+    produto: 'nigeria'    
+  targets:
+  - BR-OCI-NTOTVS13.dcndd.local:9182 # Servidor de Host Extra
+
+# - labels:
+#     job: windows_exporter # Estatisticas Sistema Operacional
+#     hostname: VI-OCI-NTOTVS01
+#     aplicacao: api
+#     ambiente: totvs
+#     env: prd
+#     produto: 'nigeria'    
+#   targets:
+#   - VI-OCI-NTOTVS01.dcndd.local:9182 # API PORTAIS - totvs  
+
+- labels:
+    job: windows_exporter # Estatisticas Sistema Operacional
+    hostname: BR-OCI-NTOTVS50
+    aplicacao: api
+    ambiente: totvs
+    env: prd
+    produto: 'nigeria'    
+  targets:
+  - BR-OCI-NTOTVS50.dcndd.local:9182 # API PORTAIS - totvs 
+
+- labels:
+    job: windows_exporter # Estatisticas Sistema Operacional
+    hostname: BR-OCI-NTOTVS51
+    aplicacao: api
+    ambiente: totvs
+    env: prd
+    produto: 'nigeria'    
+  targets:
+  - BR-OCI-NTOTVS51.dcndd.local:9182 # API PORTAIS - totvs    
+
+
+
+- labels:
+    job: NDD-Redis-Exporter # Estatistica Redis api
+    hostname: BR-OCI-NTOTVS01
+    aplicacao: api
+    ambiente: totvs
+    env: prd
+    produto: 'nigeria'    
+  targets:
+  - BR-OCI-NTOTVS01.dcndd.local:9121
+- labels:
+    job: NDD-Redis-Exporter # Estatistica Redis hosts legado nfse
+    hostname: BR-OCI-NTOTVS04
+    aplicacao: nfse-hosts
+    ambiente: totvs
+    env: prd
+    produto: 'nigeria'    
+  targets:
+  - BR-OCI-NTOTVS04.dcndd.local:9121      
+- labels:
+    job: NDD-Redis-Exporter # Estatistica Redis hosts legado nfse
+    hostname: BR-OCI-NTOTVS05
+    aplicacao: nfse-hosts
+    ambiente: totvs
+    env: prd
+    produto: 'nigeria'        
+  targets:
+  - BR-OCI-NTOTVS05.dcndd.local:9121  
+- labels:
+    job: NDD-Redis-Exporter # Estatistica Redis hosts legado nfe
+    hostname: BR-OCI-NTOTVS06
+    aplicacao: nfe
+    ambiente: totvs
+    env: prd
+    produto: 'nigeria'    
+  targets:
+  - BR-OCI-NTOTVS06.dcndd.local:9121      
+- labels:
+    job: NDD-Redis-Exporter # Estatistica Redis hosts legado nfe
+    hostname: BR-OCI-NTOTVS07
+    aplicacao: nfe
+    ambiente: totvs
+    env: prd
+    produto: 'nigeria'    
+  targets:
+  - BR-OCI-NTOTVS07.dcndd.local:9121    
+- labels:
+    job: NDD-Redis-Exporter # Estatistica Redis legado cte-mdfe
+    hostname: BR-OCI-NTOTVS08
+    aplicacao: cte-mdfe
+    ambiente: totvs
+    env: prd
+    produto: 'nigeria'        
+  targets:
+  - BR-OCI-NTOTVS08.dcndd.local:9121
+- labels:
+    job: NDD-Redis-Exporter # Estatistica Redis legado cte-mdfe
+    hostname: BR-OCI-NTOTVS09
+    aplicacao: cte-mdfe
+    ambiente: totvs
+    env: prd
+    produto: 'nigeria'        
+  targets:
+  - BR-OCI-NTOTVS09.dcndd.local:9121
+
+
+### MIGRACAO
+
+# - labels:
+#     job: windows_exporter # Estatisticas Sistema Operacional
+#     hostname: BR-OCI-NIGMIG01
+#     aplicacao: nigeria-migracao
+#     ambiente: nigeria-migracao
+#     env: prd
+#     produto: 'nigeria'    
+#   targets:
+#   - BR-OCI-NIGMIG01.dcndd.local:9182 # Maquina de Migracao
+
+# - labels:
+#     job: windows_exporter # Estatisticas Sistema Operacional
+#     hostname: BR-OCI-NIGMIG02
+#     aplicacao: nigeria-migracao
+#     ambiente: nigeria-migracao
+#     env: prd
+#     produto: 'nigeria'    
+#   targets:
+#   - BR-OCI-NIGMIG02.dcndd.local:9182 # Maquina de Migracao
+
+# - labels:
+#     job: NDD-Mssql-Statistic-Migracao
+#     ambiente: nigeria-migracao
+#     hostname: BR-OCI-NTOTDB05
+#     aplicacao: nigeria-migracao
+#     env: prd
+#     produto: 'nigeria'    
+#     server: NTOTDB05
+#   targets:
+#   - BR-OCI-NTOTVS01.dcndd.local:7021 # C:\Program Files\mssql_exporter\Metricas\PD\Estatistica_Migracao.json
+
+- labels:
+    job: NDD-Mssql-Statistic-DB
+    ambiente: nigeria-migracao
+    hostname: BR-OCI-NTOTDB05
+    aplicacao: nigeria-migracao
+    env: prd
+    produto: 'nigeria'    
+    server: NTOTDB05
+  targets:
+  - BR-OCI-NTOTVS01.dcndd.local:7022 # NTOTDB01 C:\Program Files\mssql_exporter\Metricas\PD\Estatistica_Banco.json
+
+
+# TOTVS Monitoramento Banco by ambiente monitoring docker
+################### Resources ###################
+
+- labels:
+    job: NDD-Mssql-Resources-DB-01
+    ambiente: totvs
+    hostname: BR-OCI-NTOTDB01
+    aplicacao: db-01
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7050 # monitoring
+
+- labels:
+    job: NDD-Mssql-Resources-DB-02
+    ambiente: totvs
+    hostname: BR-OCI-NTOTDB02
+    aplicacao: db-02
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7051 # monitoring 
+
+- labels:
+    job: NDD-Mssql-Resources-DB-03
+    ambiente: totvs
+    hostname: BR-OCI-NTOTDB03
+    aplicacao: db-03
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7052 # monitoring
+  
+- labels:
+    job: NDD-Mssql-Resources-DB-04
+    ambiente: totvs
+    hostname: BR-OCI-NTOTDB04
+    aplicacao: db-04
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7053 # monitoring
+  
+
+################################################
+
+################### Negocios ###################
+
+- labels:
+    job: NDD-Mssql-Negocio-NDD-APP
+    ambiente: totvs
+    hostname: BR-OCI-NTOTDB01
+    aplicacao: NDD_APP
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7101 # monitoring
+
+- labels:
+    job: NDD-Mssql-Negocio-NDD-CENTRALFRONT
+    ambiente: totvs
+    hostname: BR-OCI-NTOTDB01
+    aplicacao: NDD_CENTRALFRONT
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7201 # monitoring
+
+- labels:
+    job: NDD-Mssql-Negocio-NDD-CONNECTOR_CTeMDFe
+    ambiente: totvs
+    hostname: BR-OCI-NTOTDB03
+    aplicacao: NDD_CONNECTOR
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7301 # monitoring
+
+- labels:
+    job: NDD-Mssql-Negocio-NDD-CONNECTOR_NFe
+    ambiente: totvs
+    hostname: BR-OCI-NTOTDB03
+    aplicacao: NDD_CONNECTOR
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7401 # monitoring 
+
+- labels:
+    job: NDD-Mssql-Negocio-NDD-NFSE
+    ambiente: totvs
+    hostname: BR-OCI-NTOTDB03
+    aplicacao: NDD_NFSE
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7501 # monitoring  
+
+- labels:
+    job: NDD-Mssql-Negocio-NDD-TRANSACOES
+    ambiente: totvs
+    hostname: BR-OCI-NTOTDB02
+    aplicacao: NDD_TRANSACOES
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7601 # monitoring 
+
+### CARGILL
+
+- labels:
+    job: NDD-Node-mssql-DB
+    ambiente: cargill
+    hostname: VI-OCI-NCARDB01
+    env: prd
+    produto: 'nigeria' 
+    aplicacao: mssql   
+  targets:
+  - VI-OCI-NCARDB01.dcndd.local:9100
+
+- labels:
+    job: NDD-Node-mssql-DB
+    ambiente: cargill
+    hostname: VI-OCI-NCARDB02
+    env: prd
+    produto: 'nigeria' 
+    aplicacao: mssql   
+  targets:
+  - VI-OCI-NCARDB02.dcndd.local:9100 
+
+- labels:
+    job: NDD-Node-mssql-DB
+    ambiente: cargill
+    hostname: VI-OCI-NCARDB03
+    env: prd
+    produto: 'nigeria' 
+    aplicacao: mssql   
+  targets:
+  - VI-OCI-NCARDB03.dcndd.local:9100   
+
+# Node exporter
+
+- labels:
+    job: rabbitmq
+    ambiente: cargill
+    env: prd
+    produto: 'nigeria'    
+  targets:
+  - VI-OCI-NCARL03.dcndd.local:15692
+  - VI-OCI-NCARL03.dcndd.local:9100
+  - VI-OCI-NCARL04.dcndd.local:15692
+  - VI-OCI-NCARL04.dcndd.local:9100
+
+# windows exporter
+- labels:
+    job: windows_exporter
+    ambiente: cargill
+    hostname: VI-OCI-NCAR01
+    aplicacao: PortalAPIS
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - VI-OCI-NCAR01.dcndd.local:9182
+
+- labels:
+    job: windows_exporter
+    ambiente: cargill
+    hostname: VI-OCI-NCAR02
+    aplicacao: Hosts
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - VI-OCI-NCAR02.dcndd.local:9182
+
+- labels:
+    job: windows_exporter
+    ambiente: cargill
+    hostname: VI-OCI-NCAR03
+    aplicacao: Core NFe/MDFe/CTe/NFSe
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - VI-OCI-NCAR03.dcndd.local:9182    
+
+- labels:
+    job: windows_exporter
+    ambiente: cargill
+    hostname: VI-OCI-NCAR04
+    aplicacao: Core NFe/MDFe/CTe/NFSe
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - VI-OCI-NCAR04.dcndd.local:9182
+
+- labels:
+    job: windows_exporter
+    ambiente: cargill
+    hostname: VI-OCI-NCAR05
+    aplicacao: Hosts
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - VI-OCI-NCAR05.dcndd.local:9182
+
+# Cargil Monitoramento Banco by ambiente monitoring docker
+
+################### Resources ###################
+
+- labels:
+    job: NDD-Mssql-Resources-DB-01
+    ambiente: cargill
+    hostname: VI-OCI-NCARDB01
+    aplicacao: db-01
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7031 # monitoring
+
+- labels:
+    job: NDD-Mssql-Resources-DB-02
+    ambiente: cargill
+    hostname: VI-OCI-NCARDB02
+    aplicacao: db-02
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7032 # monitoring 
+
+- labels:
+    job: NDD-Mssql-Resources-DB-03
+    ambiente: cargill
+    hostname: VI-OCI-NCARDB03
+    aplicacao: db-03
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7033 # monitoring
+
+################################################
+
+################### Negocios ###################
+
+- labels:
+    job: NDD-Mssql-Negocio-NDD-APP
+    ambiente: cargill
+    hostname: VI-OCI-NCARDB01
+    aplicacao: NDD_APP
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7103 # monitoring
+
+- labels:
+    job: NDD-Mssql-Negocio-NDD-CENTRALFRONT
+    ambiente: cargill
+    hostname: VI-OCI-NCARDB01
+    aplicacao: NDD_CENTRALFRONT
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7203 # monitoring
+
+# - labels:
+#     job: NDD-Mssql-Negocio-NDD-NGCONNECTOR
+#     ambiente: cargil
+#     hostname: VI-OCI-NCARDB02
+#     aplicacao: NDD_NGCONNECTOR
+#     env: prd
+#     produto: 'nigeria'
+#   targets:
+#   - BR-OCI-NIGL01.dcndd.local:7803 # monitoring
+
+- labels:
+    job: NDD-Mssql-Negocio-NDD-TRANSACOES
+    ambiente: cargill
+    hostname: VI-OCI-NCARDB02
+    aplicacao: NDD_TRANSACOES
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7603 # monitoring 
+
+- labels:
+    job: NDD-Mssql-Negocio-NDD-CONNECTOR_CTeMDFe
+    ambiente: cargill
+    hostname: VI-OCI-NCARDB03
+    aplicacao: NDD_CONNECTOR
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7303 # monitoring
+
+- labels:
+    job: NDD-Mssql-Negocio-NDD-CONNECTOR_NFe
+    ambiente: cargill
+    hostname: VI-OCI-NCARDB03
+    aplicacao: NDD_CONNECTOR
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7403 # monitoring 
+
+- labels:
+    job: NDD-Mssql-Negocio-NDD-NFSE
+    ambiente: cargill
+    hostname: VI-OCI-NCARDB03
+    aplicacao: NDD_NFSE
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7503 # monitoring  
+
+################################################
+
+### Fastshop
+
+- labels:
+    job: rabbitmq
+    ambiente: fastshop
+    env: prd
+    produto: 'nigeria'    
+  targets:
+  - BR-OCI-NFASTL03.dcndd.local:15692
+  - BR-OCI-NFASTL03.dcndd.local:9100
+  - BR-OCI-NFASTL04.dcndd.local:15692
+  - BR-OCI-NFASTL04.dcndd.local:9100
+
+- labels:
+    job: windows_exporter
+    ambiente: fastshop
+    hostname: BR-OCI-NFAST01
+    aplicacao: PortalAPIS
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NFAST01.dcndd.local:9182
+
+- labels:
+    job: windows_exporter
+    ambiente: fastshop
+    hostname: BR-OCI-NFAST02
+    aplicacao: Hosts
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NFAST02.dcndd.local:9182
+
+- labels:
+    job: windows_exporter
+    ambiente: fastshop
+    hostname: BR-OCI-NFAST03
+    aplicacao: Core NFe/MDFe/CTe/NFSe
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NFAST03.dcndd.local:9182    
+
+- labels:
+    job: windows_exporter
+    ambiente: fastshop
+    hostname: BR-OCI-NFAST04
+    aplicacao: Core NFe/MDFe/CTe/NFSe
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NFAST04.dcndd.local:9182
+
+- labels:
+    job: windows_exporter
+    ambiente: fastshop
+    hostname: BR-OCI-NFAST05
+    aplicacao: Hosts
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NFAST05.dcndd.local:9182
+# FastShop Monitoramento Banco by ambiente monitoring docker
+################### Resources ###################
+
+- labels:
+    job: NDD-Mssql-Resources-DB-01
+    ambiente: fastshop
+    hostname: BR-OCI-NFASDB01
+    aplicacao: db-01
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7041 # monitoring
+
+- labels:
+    job: NDD-Mssql-Resources-DB-02
+    ambiente: fastshop
+    hostname: BR-OCI-NFASDB02
+    aplicacao: db-02
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7042 # monitoring 
+
+- labels:
+    job: NDD-Mssql-Resources-DB-03
+    ambiente: fastshop
+    hostname: BR-OCI-NFASDB03
+    aplicacao: db-03
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7043 # monitoring
+
+################################################
+
+################### Negocios ###################
+
+- labels:
+    job: NDD-Mssql-Negocio-NDD-APP
+    ambiente: fastshop
+    hostname: BR-OCI-NFASDB01
+    aplicacao: NDD_APP
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7104 # monitoring 
+
+- labels:
+    job: NDD-Mssql-Negocio-NDD-CENTRALFRONT
+    ambiente: fastshop
+    hostname: BR-OCI-NFASDB01
+    aplicacao: NDD_CENTRALFRONT
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7204 # monitoring 
+
+- labels:
+    job: NDD-Mssql-Negocio-NDD-CONNECTOR_CTeMDFe
+    ambiente: fastshop
+    hostname: BR-OCI-NFASDB03
+    aplicacao: NDD_CONNECTOR
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7304 # monitoring 
+
+- labels:
+    job: NDD-Mssql-Negocio-NDD-CONNECTOR_NFe
+    ambiente: fastshop
+    hostname: BR-OCI-NFASDB03
+    aplicacao: NDD_CONNECTOR
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7404 # monitoring 
+
+- labels:
+    job: NDD-Mssql-Negocio-NDD-NFSE
+    ambiente: fastshop
+    hostname: BR-OCI-NFASDB03
+    aplicacao: NDD_NFSE
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7504 # monitoring  
+
+- labels:
+    job: NDD-Mssql-Negocio-NDD-TRANSACOES
+    ambiente: fastshop
+    hostname: BR-OCI-NFASDB02
+    aplicacao: NDD_TRANSACOES
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:7604 # monitoring 
+
+#### FastShop
+
+- labels:
+    job: NDD-Node-mssql-DB
+    ambiente: fastshop
+    hostname: BR-OCI-NFASDB01
+    env: prd
+    produto: 'nigeria' 
+    aplicacao: mssql   
+  targets:
+  - BR-OCI-NFASDB01.dcndd.local:9100
+
+- labels:
+    job: NDD-Node-mssql-DB
+    ambiente: fastshop
+    hostname: BR-OCI-NFASDB02
+    env: prd
+    produto: 'nigeria' 
+    aplicacao: mssql   
+  targets:
+  - BR-OCI-NFASDB02.dcndd.local:9100 
+
+- labels:
+    job: NDD-Node-mssql-DB
+    ambiente: fastshop
+    hostname: BR-OCI-NFASDB03
+    env: prd
+    produto: 'nigeria' 
+    aplicacao: mssql   
+  targets:
+  - BR-OCI-NFASDB03.dcndd.local:9100   
+
+### Monitoring
+
+- labels:
+    job: node-exporter-monitoring
+    hostname: BR-OCI-NIGL01    
+    ambiente: monitoring
+    aplicacao: docker-mssql-exporter
+    env: prd
+    produto: 'nigeria'    
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:9100
+ 
+- labels:
+    job: docker-exporter-monitoring
+    hostname: BR-OCI-NIGL01
+    ambiente: monitoring
+    aplicacao: docker-mssql-exporter
+    env: prd
+    produto: 'nigeria'    
+  targets:
+  - BR-OCI-NIGL01.dcndd.local:9417 
+
+  
+

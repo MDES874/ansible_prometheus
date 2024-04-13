@@ -1,0 +1,4 @@
+{% if prometheus_msteams_connectors | length %}
+connectors:
+  {{ prometheus_msteams_connectors | to_nice_yaml(indent=2) | indent(2, False) }}
+{% endif %}

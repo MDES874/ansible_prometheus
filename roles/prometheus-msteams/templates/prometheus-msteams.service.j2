@@ -1,0 +1,18 @@
+#
+# Ansible managed
+#
+[Unit]
+Description=Prometheus-msteams
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User={{ _prometheus_msteams_system_user }}
+Group={{ _prometheus_msteams_system_group }}
+ExecStart={{ _prometheus_msteams_binary_install_dir }}/prometheus-msteams \
+  -config-file {{ prometheus_msteams_config_dir }}/config.yml \
+  -template-file {{ prometheus_msteams_config_dir }}/card.tmpl
+
+[Install]
+WantedBy=multi-user.target

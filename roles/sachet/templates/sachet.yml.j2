@@ -1,0 +1,15 @@
+{% if sachet_providers | length %}
+providers:
+  {{ sachet_providers | to_nice_yaml(indent=2) | indent(2, False) }}
+{% endif %}
+
+{% if sachet_receivers | length %}
+receivers:
+  {{ sachet_receivers | to_nice_yaml(indent=2) | indent(2, False) }}
+{% endif %}
+
+
+{% if sachet_templates | length %}
+templates:
+  {{ sachet_templates | to_nice_yaml(indent=2) | indent(2, False) }}
+{% endif %}

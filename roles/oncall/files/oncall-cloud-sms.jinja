@@ -1,0 +1,11 @@
+{% set annotations = payload.get("commonAnnotations", {}).copy() -%}
+{% set groupLabels = payload.get("groupLabels", {}) -%}
+{% set commonLabels = payload.get("commonLabels", {}) -%}
+{% set severity = groupLabels.severity -%}
+{% set legacyLabels = payload.get("labels", {}) -%}
+{% set legacyAnnotations = payload.get("annotations", {}) -%}
+
+{{ commonLabels['produto'] }}-{{ commonLabels['ambiente'] }}-{{ commonLabels['aplicacao'] }}-{{ commonLabels['severity'] }} 
+{{ commonLabels['alertname'] }}
+
+ 

@@ -1,0 +1,17 @@
+---
+- name: restart sachet
+  become: true
+  service:
+    name: sachet
+    state: restarted
+  tags:
+    - sachet_run
+
+- name: reload sachet
+  become: true
+  service:
+    name: sachet
+    state: reloaded
+  tags:
+    - sachet_run    
+

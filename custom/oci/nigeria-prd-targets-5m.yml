@@ -1,0 +1,50 @@
+# TOTVS
+
+# - labels:
+#     job: NDD-Mssql-SRE-PontaaPonta
+#     ambiente: totvs
+#     hostname: BR-OCI-NIGL01
+#     aplicacao: desempenho
+#     env: prd
+#     produto: 'nigeria'
+#   targets:
+#   #- BR-OCI-NIG01.dcndd.local:7600 #  C:\Program Files\mssql_exporter\Metricas\PD\Estatistica_PontaaPonta.json  
+#   - BR-OCI-NIGL01.dcndd.local:7600 #  Roda no ambiente monitoring
+
+# # Neogrid
+
+# - labels:
+#     job: NDD-Mssql-SRE-PontaaPonta
+#     ambiente: neogrid
+#     hostname: BR-OCI-NIGL01
+#     aplicacao: desempenho
+#     env: prd
+#     produto: 'nigeria'
+#   targets:
+#   #- BR-OCI-NIG01.dcndd.local:7601 #  C:\Program Files\mssql_exporter\Metricas\PD\Estatistica_PontaaPontaNeogrid.json
+#   - BR-OCI-NIGL01.dcndd.local:7601 #  Roda no ambiente monitoring
+
+# # Cargill
+
+# - labels:
+#     job: NDD-Mssql-SRE-PontaaPonta
+#     ambiente: cargill
+#     hostname: BR-OCI-NIGL01
+#     aplicacao: desempenho
+#     env: prd
+#     produto: 'nigeria'
+#   targets:
+#   #- BR-OCI-NIG01.dcndd.local:7602 #  C:\Program Files\mssql_exporter\Metricas\PD\Estatistica_PontaaPontaCargill.json   
+#   - BR-OCI-NIGL01.dcndd.local:7602 #  Roda no ambiente monitoring  
+
+# # Fastshop
+
+# - labels:
+#     job: NDD-Mssql-SRE-PontaaPonta
+#     ambiente: fastshop
+#     hostname: BR-OCI-NIGL01
+#     aplicacao: desempenho
+#     env: prd
+#     produto: 'nigeria'
+#   targets:
+#   - BR-OCI-NIGL01.dcndd.local:7603 #  Roda no ambiente monitoring

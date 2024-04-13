@@ -1,0 +1,37 @@
+---
+- name: create systemd service unit
+  template:
+    src: sachet.service.j2
+    dest: /etc/systemd/system/sachet.service
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart sachet
+
+
+- name: copy custom template files
+  copy:
+    src: "{{ item }}"
+    dest: "{{ sachet_config_dir }}/"
+    owner: root
+    group: sachet
+    mode: 0640
+  with_fileglob:
+    - ../files/*.tmpl
+  notify: reload sachet
+
+- name: Create sachet main configuration file
+  template:
+    src: sachet.yml.j2
+    dest: "{{ sachet_config_dir }}/sachet.yml"
+    owner: root
+    group: sachet
+    mode: 0640
+  notify: restart sachet
+
+- name: Enable and start Sachet systemd unit
+  systemd:
+    name: sachet
+    enabled: true
+    state: started
+    daemon_reload: true

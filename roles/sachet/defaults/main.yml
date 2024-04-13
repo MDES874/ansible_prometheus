@@ -1,0 +1,30 @@
+---
+sachet_version: 0.3.1
+
+sachet_config_dir: /etc/sachet
+
+sachet_instance: "{{ ansible_fqdn | default(ansible_host) | default(inventory_hostname) }}"
+sachet_repository: "github.com/messagebird/sachet"
+
+sachet_address: "127.0.0.1"
+sachet_port: 9876
+
+sachet_providers: []
+# Example :
+#  freemobile:
+#    username: 'xxxx'
+#    password: 'xxxx'
+#    url: "https://smsapi.free-mobile.fr/sendmsg"
+#  twilio:
+#    account_sid: 'xxx'
+#    auth_token: 'xxx'
+
+sachet_receivers: []
+# Example : 
+#  - name: 'team-sms'
+#    provider: 'freemobile'
+
+
+sachet_templates: []
+# Example : 
+#   - teste.tmpl

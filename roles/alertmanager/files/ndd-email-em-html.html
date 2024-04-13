@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ .CommonLabels.alertname }}</title>
+	<style>
+		body {
+			font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			color: #333;
+		}
+		table {
+			border-collapse: collapse;
+			margin-top: 15px;
+		}
+		table th, table td {
+			padding: 8px;
+			border: 1px solid #ddd;
+		}
+		table th {
+			background-color: #f5f5f5;
+		}
+		table td.ok {
+			background-color: #dff0d8;
+		}
+		table td.warning {
+			background-color: #ffd500;
+		}
+		table td.critical {
+			background-color: #a50000;
+		}
+		table td.unknown {
+			background-color: #fffbfb;
+		}
+        .sitesky{color: #5700ff;font-size: 15px;margin-left: 0px}
+	</style>
+</head>
+<body>
+    <p>Temos <em><strong class="sitesky">{{ if eq .Status "firing" }}{{ .Alerts.Firing | len }}{{ end }}</strong></em>  alertas  do tipo <em><strong class="sitesky">"{{ .CommonLabels.alertname }}"</strong></em> no ambiente  <em><strong class="sitesky">"{{ .CommonLabels.ambiente }}"</strong></em> que requerem sua atenção.</p>
+
+    {{ if gt (len .Alerts.Firing) 0 }}
+        <h2>🔥 Firing!!!</h2>
+        <ul>
+            {{ range .Alerts.Firing }}
+                <li>
+                    <p><em><strong class="sitesky">Severidade:</strong></em> {{ .Labels.severity }}</p>
+                    <p><em><strong class="sitesky">Descrição:</strong></em> {{ .Annotations.description }}</p>
+                    <p><em><strong class="sitesky">É enviado quando:</strong></em> {{ .Annotations.summary }}</p>
+                    <p><em><strong class="sitesky">O que fazer ao receber:</strong></em> {{ .Annotations.acao }}</p>
+                    <br>
+                </li>
+            {{ end }}
+        </ul>
+    {{ end }}
+
+    {{ if gt (len .Alerts.Resolved) 0 }}
+        <h2>✅ Resolvido!</h2>
+        <ul>
+            {{ range .Alerts.Resolved }}
+                <li>
+                    <p><em><strong class="sitesky">Alerta:</strong></em> {{ .Labels.alertname }}</p>
+                    <p><em><strong class="sitesky">Ambiente:</strong></em> {{ .Labels.ambiente }}</p>
+                    <p><em><strong class="sitesky">Severidade:</strong></em> {{ .Labels.severity }}</p>
+                    <p><em><strong class="sitesky">Descrição:</strong></em> {{ .Annotations.description }}</p><br>
+                </li>
+            {{ end }}
+        </ul>
+    {{ end }}
+    <p><em>Mensagem enviada através do sistema de monitoramento <a href="https://skyview.ndd.tech/login" target="_blank" style="text-decoration: none;"><b class="sitesky">skyview</b></a>.</em></p>
+</body>
+</html>

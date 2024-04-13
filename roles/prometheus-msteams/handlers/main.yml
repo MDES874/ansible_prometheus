@@ -1,0 +1,8 @@
+---
+- name: restart prometheus-msteams
+  become: true
+  service:
+    name: prometheus-msteams
+    state: restarted
+  tags:
+    - prometheus_msteams_run

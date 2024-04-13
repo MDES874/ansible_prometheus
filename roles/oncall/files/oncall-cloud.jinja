@@ -1,0 +1,32 @@
+{% set annotations = payload.get("commonAnnotations", {}).copy() -%}
+{% set groupLabels = payload.get("groupLabels", {}) -%}
+{% set commonLabels = payload.get("commonLabels", {}) -%}
+{% set severity = groupLabels.severity -%}
+{% set legacyLabels = payload.get("labels", {}) -%}
+{% set legacyAnnotations = payload.get("annotations", {}) -%}
+
+{% if severity -%}
+{% set severity_emoji = {"critical": ":rotating_light:", "warning": ":warning:" }[severity] | default(":question:") -%}
+Severidade: {{ severity }} {{ severity_emoji }}
+{% endif -%}
+
+{% set status = payload.get("status", "Unknown") -%}
+{% set status_emoji = {"firing": ":fire:", "resolved": ":white_check_mark:"}[status] | default(":warning:") -%}
+Status: {{ status }} {{ status_emoji }} ( {{ commonLabels['job'] }} – {{ commonLabels['alertname'] }} )
+{% if status == "firing" and payload.numFiring -%}
+Alertas ativos – {{ payload.numFiring }}
+Alertas resolvidos – {{ payload.numResolved }}
+{% endif -%}
+
+Alerta Referente ao **Produto**: {{ commonLabels['produto'] }} - **Ambiente**: {{ commonLabels['ambiente'] }}.
+ 
+- **Severidade**: {{ commonLabels['severity'] }}
+
+- **Descrição**: {{ annotations['description'] }} 
+
+- **É enviado quando**: {{ annotations['summary'] }} 
+
+- **O que fazer ao receber**: {{ annotations['acao'] }} 
+
+
+Mensagem enviada através do sistema de monitoramento Skyview https://skyview.ndd.tech/login

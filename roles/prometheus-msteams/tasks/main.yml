@@ -1,0 +1,11 @@
+---
+
+- include: install.yml
+  become: true
+  tags:
+    - prometheus_msteams_install
+
+- include: configure.yml
+  become: true
+  tags:
+    - prometheus_msteams_configure

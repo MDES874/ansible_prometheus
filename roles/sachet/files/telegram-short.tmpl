@@ -1,0 +1,19 @@
+{{ define "telegram_title" }}[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }} @ {{ .CommonLabels.identifier }} {{ end }}
+
+{{ define "telegram_message_short" }}
+{{ if gt (len .Alerts.Firing) 0 }}
+{{ range .Alerts.Firing }} 
+🔥 {{ .Labels.alertname }}
+Amb: {{ .Labels.ambiente }}
+Para mais detalhes acesse seu e-mail.
+{{ end }}{{ end }}
+
+{{ if gt (len .Alerts.Resolved) 0 }}
+{{ range .Alerts.Resolved }} 
+✅ {{ .Labels.alertname }}
+Amb: {{ .Labels.ambiente }}
+
+{{ end }}{{ end }}{{ end }}
+
+{{ define "telegram_text" }}{{ template "telegram_title" .}}
+{{ template "telegram_message_short" . }}{{ end }}

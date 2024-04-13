@@ -1,0 +1,18 @@
+- hosts: prometheus
+  pre_tasks:
+    - name: install python36
+      become: true
+      yum:
+        name: python36
+        state: latest
+  roles:
+    - role: prometheus
+      tags: prometheus
+    - role: alertmanager
+      tags: alertmanager
+    - role: sachet
+      tags: sachet
+    - role: prometheus-msteams
+      tags: prometheus-msteams
+  vars:
+    exansible_python_interpreter: /usr/bin/python3

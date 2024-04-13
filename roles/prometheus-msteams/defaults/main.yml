@@ -1,0 +1,7 @@
+---
+prometheus_msteams_version: 1.4.1
+prometheus_msteams_config_dir: /etc/prometheus-msteams
+
+prometheus_msteams_connectors: []
+# Example : 
+#   - alert_channel: "https://outlook.office.com/webhook/test"

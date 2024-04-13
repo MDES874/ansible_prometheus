@@ -1,0 +1,24 @@
+#
+# Ansible managed
+#
+[Unit]
+Description=Sachet
+After=network-online.target
+
+[Service]
+Type=simple
+PIDFile=/var/run/sachet.pid
+User=sachet
+Group=sachet
+PermissionsStartOnly=true
+ExecReload=/bin/kill -HUP $MAINPID
+ExecStart=/usr/local/bin/sachet \
+  -config {{ sachet_config_dir }}/sachet.yml \
+  -listen-address={{ sachet_address }}:{{ sachet_port }}
+
+SyslogIdentifier=sachet
+KillMode=process
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
