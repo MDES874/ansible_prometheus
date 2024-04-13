@@ -20,7 +20,7 @@
 #     env: prd
 #     produto: 'nigeria'
 #   targets:
-#   - BR-OCI-NIG01.dcndd.local:9182 # GW - Neogrid
+#   - BR-OCI-NIG01.dcndd.local:9082 # GW - Neogrid
 
 - labels:
     job: windows_exporter # Estatisticas Sistema Operacional
@@ -30,7 +30,7 @@
     env: prd
     produto: 'nigeria'
   targets:
-  - BR-OCI-NIG02.dcndd.local:9182 # API PORTAIS - Neogrid
+  - BR-OCI-NIG02.dcndd.local:9082 # API PORTAIS - Neogrid
 
 - labels:
     job: windows_exporter # Estatisticas Sistema Operacional
@@ -40,7 +40,7 @@
     env: prd
     produto: 'nigeria'
   targets:
-  - BR-OCI-NIG03.dcndd.local:9182 # PASSIVO - Neogrid
+  - BR-OCI-NIG03.dcndd.local:9082 # PASSIVO - Neogrid
 - labels:
     job: windows_exporter # Estatisticas Sistema Operacional
     ambiente: neogrid
@@ -49,7 +49,7 @@
     env: prd
     produto: 'nigeria'
   targets:
-  - BR-OCI-NIG04.dcndd.local:9182 # WS - Neogrid
+  - BR-OCI-NIG04.dcndd.local:9082 # WS - Neogrid
 
 - labels:
     job: windows_exporter # Estatisticas Sistema Operacional
@@ -60,7 +60,7 @@
     produto: 'nigeria'
   targets:
 
-  - BR-OCI-NIG05.dcndd.local:9182 # NODO A - Legado NFSE e Hosts - Neogrid
+  - BR-OCI-NIG05.dcndd.local:9082 # NODO A - Legado NFSE e Hosts - Neogrid
 - labels:
     job: windows_exporter # Estatisticas Sistema Operacional
     ambiente: neogrid
@@ -69,7 +69,7 @@
     env: prd
     produto: 'nigeria'
   targets:
-  - BR-OCI-NIG11.dcndd.local:9182 # NODO B - Legado NFSE e Hosts - Neogrid
+  - BR-OCI-NIG11.dcndd.local:9082 # NODO B - Legado NFSE e Hosts - Neogrid
 
 - labels:
     job: windows_exporter # Estatisticas Sistema Operacional
@@ -79,7 +79,7 @@
     env: prd
     produto: 'nigeria'
   targets:
-  - BR-OCI-NIG07.dcndd.local:9182 # NODO A - Legado NFE - Neogrid
+  - BR-OCI-NIG07.dcndd.local:9082 # NODO A - Legado NFE - Neogrid
 
 - labels:
     job: windows_exporter # Estatisticas Sistema Operacional
@@ -89,7 +89,7 @@
     env: prd
     produto: 'nigeria'
   targets:
-  - BR-OCI-NIG08.dcndd.local:9182 # NODO B - Legado NFE - Neogrid
+  - BR-OCI-NIG08.dcndd.local:9082 # NODO B - Legado NFE - Neogrid
 
 - labels:
     job: windows_exporter # Estatisticas Sistema Operacional
@@ -99,7 +99,7 @@
     env: prd
     produto: 'nigeria'
   targets:
-  - BR-OCI-NIG09.dcndd.local:9182 # NODO A - eForms CTe/MDFe - Neogrid
+  - BR-OCI-NIG09.dcndd.local:9082 # NODO A - eForms CTe/MDFe - Neogrid
 
 - labels:
     job: windows_exporter # Estatisticas Sistema Operacional
@@ -109,7 +109,7 @@
     env: prd
     produto: 'nigeria'
   targets:
-  - BR-OCI-NIG10.dcndd.local:9182 # NODO B - eForms CTe/MDFe - Neogrid
+  - BR-OCI-NIG10.dcndd.local:9082 # NODO B - eForms CTe/MDFe - Neogrid
 
 
 # Neogrid NFCE
@@ -142,7 +142,7 @@
     env: prd
     produto: 'nigeria'
   targets:
-  - BR-OCI-NNFCE01.dcndd.local:9182 
+  - BR-OCI-NNFCE01.dcndd.local:9082 
 
 - labels:
     job: windows_exporter_nfce # Estatisticas Sistema Operacional
@@ -152,7 +152,7 @@
     env: prd
     produto: 'nigeria'
   targets:
-  - BR-OCI-NNFCE02.dcndd.local:9182 
+  - BR-OCI-NNFCE02.dcndd.local:9082 
 
 
 # Neogrid Monitoramento Banco by ambiente monitoring docker
@@ -292,7 +292,7 @@
     env: prd
     produto: 'nigeria'    
   targets:
-  - BR-OCI-NTOTVS02.dcndd.local:9182 # PASSIVO - totvs
+  - BR-OCI-NTOTVS02.dcndd.local:9082 # PASSIVO - totvs
 - labels:
     job: windows_exporter # Estatisticas Sistema Operacional
     hostname: BR-OCI-NTOTVS03
@@ -301,7 +301,7 @@
     env: prd
     produto: 'nigeria'    
   targets:
-  - BR-OCI-NTOTVS03.dcndd.local:9182 # WS - totvs
+  - BR-OCI-NTOTVS03.dcndd.local:9082 # WS - totvs
 - labels:
     job: windows_exporter # Estatisticas Sistema Operacional
     hostname: BR-OCI-NTOTVS04
@@ -310,7 +310,7 @@
     env: prd
     produto: 'nigeria'    
   targets:
-  - BR-OCI-NTOTVS04.dcndd.local:9182 # NODO A - Legado NFSE e Hosts - totvs
+  - BR-OCI-NTOTVS04.dcndd.local:9082 # NODO A - Legado NFSE e Hosts - totvs
 - labels:
     job: windows_exporter # Estatisticas Sistema Operacional
     hostname: BR-OCI-NTOTVS05
@@ -319,7 +319,7 @@
     env: prd
     produto: 'nigeria'    
   targets:
-  - BR-OCI-NTOTVS05.dcndd.local:9182 # NODO B - Legado NFSE e Hosts - totvs
+  - BR-OCI-NTOTVS05.dcndd.local:9082 # NODO B - Legado NFSE e Hosts - totvs
 - labels:
     job: windows_exporter # Estatisticas Sistema Operacional
     hostname: BR-OCI-NTOTVS06
@@ -328,7 +328,7 @@
     env: prd
     produto: 'nigeria'    
   targets:
-  - BR-OCI-NTOTVS06.dcndd.local:9182 # NODO A - Legado NFE email entry - totvs
+  - BR-OCI-NTOTVS06.dcndd.local:9082 # NODO A - Legado NFE email entry - totvs
 
 - labels:
     job: windows_exporter # Estatisticas Sistema Operacional
@@ -338,7 +338,7 @@
     env: prd
     produto: 'nigeria'    
   targets:
-  - BR-OCI-NTOTVS14.dcndd.local:9182 # NODO A - Legado NFE email entry - totvs
+  - BR-OCI-NTOTVS14.dcndd.local:9082 # NODO A - Legado NFE email entry - totvs
 
 - labels:
     job: windows_exporter # Estatisticas Sistema Operacional
@@ -348,7 +348,7 @@
     env: prd
     produto: 'nigeria'    
   targets:
-  - BR-OCI-NTOTVS07.dcndd.local:9182 # NODO B - Legado NFE email entry - totvs
+  - BR-OCI-NTOTVS07.dcndd.local:9082 # NODO B - Legado NFE email entry - totvs
 - labels:
     job: windows_exporter # Estatisticas Sistema Operacional
     hostname: BR-OCI-NTOTVS08
@@ -357,7 +357,7 @@
     env: prd
     produto: 'nigeria'    
   targets:
-  - BR-OCI-NTOTVS08.dcndd.local:9182 # NODO A - eForms CTe/MDFe - totvs
+  - BR-OCI-NTOTVS08.dcndd.local:9082 # NODO A - eForms CTe/MDFe - totvs
 - labels:
     job: windows_exporter # Estatisticas Sistema Operacional
     hostname: BR-OCI-NTOTVS09
@@ -366,7 +366,7 @@
     env: prd
     produto: 'nigeria'    
   targets:
-  - BR-OCI-NTOTVS09.dcndd.local:9182 # NODO B - eForms CTe/MDFe - totvs
+  - BR-OCI-NTOTVS09.dcndd.local:9082 # NODO B - eForms CTe/MDFe - totvs
 - labels:
     job: windows_exporter # Estatisticas Sistema Operacional
     hostname: BR-OCI-NTOTVS11
@@ -375,7 +375,7 @@
     env: prd
     produto: 'nigeria'      
   targets:
-  - BR-OCI-NTOTVS11.dcndd.local:9182 # Servidor de Host Extra
+  - BR-OCI-NTOTVS11.dcndd.local:9082 # Servidor de Host Extra
 
 - labels:
     job: windows_exporter # Estatisticas Sistema Operacional
@@ -385,7 +385,7 @@
     env: prd
     produto: 'nigeria'    
   targets:
-  - BR-OCI-NTOTVS12.dcndd.local:9182 # Servidor de Host Extra
+  - BR-OCI-NTOTVS12.dcndd.local:9082 # Servidor de Host Extra
 
 - labels:
     job: windows_exporter # Estatisticas Sistema Operacional
@@ -395,7 +395,7 @@
     env: prd
     produto: 'nigeria'    
   targets:
-  - BR-OCI-NTOTVS13.dcndd.local:9182 # Servidor de Host Extra
+  - BR-OCI-NTOTVS13.dcndd.local:9082 # Servidor de Host Extra
 
 # - labels:
 #     job: windows_exporter # Estatisticas Sistema Operacional
@@ -405,7 +405,7 @@
 #     env: prd
 #     produto: 'nigeria'    
 #   targets:
-#   - VI-OCI-NTOTVS01.dcndd.local:9182 # API PORTAIS - totvs  
+#   - VI-OCI-NTOTVS01.dcndd.local:9082 # API PORTAIS - totvs  
 
 - labels:
     job: windows_exporter # Estatisticas Sistema Operacional
@@ -415,7 +415,7 @@
     env: prd
     produto: 'nigeria'    
   targets:
-  - BR-OCI-NTOTVS50.dcndd.local:9182 # API PORTAIS - totvs 
+  - BR-OCI-NTOTVS50.dcndd.local:9082 # API PORTAIS - totvs 
 
 - labels:
     job: windows_exporter # Estatisticas Sistema Operacional
@@ -425,7 +425,7 @@
     env: prd
     produto: 'nigeria'    
   targets:
-  - BR-OCI-NTOTVS51.dcndd.local:9182 # API PORTAIS - totvs    
+  - BR-OCI-NTOTVS51.dcndd.local:9082 # API PORTAIS - totvs    
 
 
 
@@ -504,7 +504,7 @@
 #     env: prd
 #     produto: 'nigeria'    
 #   targets:
-#   - BR-OCI-NIGMIG01.dcndd.local:9182 # Maquina de Migracao
+#   - BR-OCI-NIGMIG01.dcndd.local:9082 # Maquina de Migracao
 
 # - labels:
 #     job: windows_exporter # Estatisticas Sistema Operacional
@@ -514,7 +514,7 @@
 #     env: prd
 #     produto: 'nigeria'    
 #   targets:
-#   - BR-OCI-NIGMIG02.dcndd.local:9182 # Maquina de Migracao
+#   - BR-OCI-NIGMIG02.dcndd.local:9082 # Maquina de Migracao
 
 # - labels:
 #     job: NDD-Mssql-Statistic-Migracao
@@ -701,7 +701,7 @@
     env: prd
     produto: 'nigeria'
   targets:
-  - VI-OCI-NCAR01.dcndd.local:9182
+  - VI-OCI-NCAR01.dcndd.local:9082
 
 - labels:
     job: windows_exporter
@@ -711,7 +711,7 @@
     env: prd
     produto: 'nigeria'
   targets:
-  - VI-OCI-NCAR02.dcndd.local:9182
+  - VI-OCI-NCAR02.dcndd.local:9082
 
 - labels:
     job: windows_exporter
@@ -721,7 +721,7 @@
     env: prd
     produto: 'nigeria'
   targets:
-  - VI-OCI-NCAR03.dcndd.local:9182    
+  - VI-OCI-NCAR03.dcndd.local:9082    
 
 - labels:
     job: windows_exporter
@@ -731,7 +731,7 @@
     env: prd
     produto: 'nigeria'
   targets:
-  - VI-OCI-NCAR04.dcndd.local:9182
+  - VI-OCI-NCAR04.dcndd.local:9082
 
 - labels:
     job: windows_exporter
@@ -741,7 +741,7 @@
     env: prd
     produto: 'nigeria'
   targets:
-  - VI-OCI-NCAR05.dcndd.local:9182
+  - VI-OCI-NCAR05.dcndd.local:9082
 
 # Cargil Monitoramento Banco by ambiente monitoring docker
 
@@ -874,7 +874,7 @@
     env: prd
     produto: 'nigeria'
   targets:
-  - BR-OCI-NFAST01.dcndd.local:9182
+  - BR-OCI-NFAST01.dcndd.local:9082
 
 - labels:
     job: windows_exporter
@@ -884,7 +884,7 @@
     env: prd
     produto: 'nigeria'
   targets:
-  - BR-OCI-NFAST02.dcndd.local:9182
+  - BR-OCI-NFAST02.dcndd.local:9082
 
 - labels:
     job: windows_exporter
@@ -894,7 +894,7 @@
     env: prd
     produto: 'nigeria'
   targets:
-  - BR-OCI-NFAST03.dcndd.local:9182    
+  - BR-OCI-NFAST03.dcndd.local:9082    
 
 - labels:
     job: windows_exporter
@@ -904,7 +904,7 @@
     env: prd
     produto: 'nigeria'
   targets:
-  - BR-OCI-NFAST04.dcndd.local:9182
+  - BR-OCI-NFAST04.dcndd.local:9082
 
 - labels:
     job: windows_exporter
@@ -914,7 +914,7 @@
     env: prd
     produto: 'nigeria'
   targets:
-  - BR-OCI-NFAST05.dcndd.local:9182
+  - BR-OCI-NFAST05.dcndd.local:9082
 # FastShop Monitoramento Banco by ambiente monitoring docker
 ################### Resources ###################
 

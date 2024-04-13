@@ -24,6 +24,7 @@ groups:
     labels:
       severity: alta
       support_team: "yes"
+      sre_team: "yes"
       nivel: "resource"
 
   - alert: CargaCriticaCPUDB

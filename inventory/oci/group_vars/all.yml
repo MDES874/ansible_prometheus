@@ -354,58 +354,6 @@ prometheus_scrape_configs:
     module: [http_2xx]
   static_configs:
 
-# Skyview
-
-    - targets:      
-      - https://skyview.ndd.tech/api/health
-      labels:
-        severity: 'critical'
-        ambiente: 'skyview'
-        produto: 'skyview'
-        aplicacao: 'skyview'            
-        env: 'prd'
-        sre_team: "yes"
-
-    - targets:      
-      - http://20.22.58.252:9090/status
-      labels:
-        severity: 'critical'
-        ambiente: 'skyview'
-        produto: 'skyview'
-        aplicacao: 'prometheus-orbix-am'            
-        env: 'prd'
-        sre_team: "yes"  
-
-    - targets:      
-      - http://20.79.140.50:9090/status
-      labels:
-        severity: 'critical'
-        ambiente: 'skyview'
-        produto: 'skyview'
-        aplicacao: 'prometheus-orbix-eu'            
-        env: 'prd'
-        sre_team: "yes"
-
-    - targets:      
-      - http://138.94.211.13:9100/status
-      labels:
-        severity: 'critical'
-        ambiente: 'skyview'
-        produto: 'skyview'
-        aplicacao: 'prometheus-cotia'            
-        env: 'prd'
-        sre_team: "yes"
-
-    - targets:      
-      - https://skyview-labs.ndd.tech/api/health
-      labels:
-        severity: 'info'
-        ambiente: 'skyview-labs'
-        produto: 'skyview'
-        aplicacao: 'skyview-labs'            
-        env: 'labs'
-        sre_team: "no"        
-
 # Nigeria Totvs
 
     - targets:
