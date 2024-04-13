@@ -20,7 +20,7 @@ groups:
       summary: Sempre que o servidor {{ $labels.hostname }} estiver com demora na resposta dos endpoints..
       acao: 'Pode indicar timeout no exporter, no caso mssql querys estão levando mais de 20 segundos, experimente criar mais instâncias separando as consultas mais pesadas.'
     expr: up{produto="nigeria"} == 0
-    for: 20m
+    for: 2m
     labels:
       severity: alta
       support_team: "yes"
