@@ -60,11 +60,6 @@ alertmanager_route:
       - semana_comercial      
     - receiver: "sre-team-msteams"
       continue: true
-    - receiver: "oncall-skyview"
-      matchers:
-      - produto = "skyview"
-      - severity = critical
-      continue: true
 
   - match:
       sre_team: "yes"
