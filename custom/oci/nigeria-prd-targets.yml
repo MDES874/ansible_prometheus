@@ -19,3 +19,13 @@
     produto: 'nigeria'
   targets:
   - BR-OCI-NIG03.dcndd.local:9182 # API PORTAIS - Neogrid
+
+- labels:
+    job: windows_exporter # Estatisticas Sistema Operacional
+    ambiente: neogrid
+    hostname: BR-OCI-Teste
+    aplicacao: api
+    env: prd
+    produto: 'nigeria'
+  targets:
+  - BR-OCI-NIG03.dcndd.local:9082 # API PORTAIS - Neogrid

@@ -28,7 +28,6 @@ alertmanager_receivers:
 - name: alertsnitch
   webhook_configs:
     - url: http://br-oci-nigl01.dcndd.local:9567/webhook
-    send_resolved: true
 
 - name: keepaneye
   webhook_configs:
