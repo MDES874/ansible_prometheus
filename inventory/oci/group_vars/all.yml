@@ -77,13 +77,7 @@ alertmanager_route:
     - receiver: "keepaneye"
       continue: true   
 
-### FIM ALERMANAGER ROUTES
-
-alertmanager_inhibit_rules:
-- target_match:
-    alertname: Watchdog
-- target_match:
-    env: prd     
+### FIM ALERMANAGER ROUTES 
 
 
 ### GERENCIAMENTO DE MUTE INTERVALS
