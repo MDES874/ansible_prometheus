@@ -1,0 +1,566 @@
+groups:
+- name: ansible managed alert rules
+  rules:
+  - alert: ConsultasAtivasDB
+    annotations:
+      description: 'Há uma consulta ativa no banco de dados a mais de 20 minutos.'
+      summary: Verifique se há consultas pesadas ativas. 
+    expr: NDD_CONSULTAS_ATIVAS_BANCO{produto="nigeria"} >= 2 or sql_NDD_CONSULTAS_ATIVAS_BANCO{produto="nigeria"} >= 2
+    for: 20m
+    labels:
+      severity: critica
+      sre_team: "yes"
+      support_team: "yes"
+      dev_team: "yes"
+      nivel: "negocio"
+  - alert: EspacoEmDiscoDBCritical
+    annotations:
+      description: 'O Ambiente {{ $labels.ambiente }} está com o servidor {{ $labels.hostname }} com {{$value}} GB de espaço em disco disponível.'
+      summary: Solicite para a infra aumento no disco do servidor {{ $labels.hostname }}.
+    expr: round((NDD_DB_Espaco_disponivel_disco_bytes{produto="nigeria"} / 1073741824),1) <= 10 or round((sql_NDD_DB_Espaco_disponivel_disco_bytes{produto="nigeria"} / 1073741824),1) <= 10
+    for: 1m
+    labels:
+      severity: critica
+      sre_team: "yes"
+      support_team: "yes"
+      dev_team: "yes"
+      nivel: "negocio"
+
+  - alert: EspacoEmDiscoDBWarning
+    annotations:
+      description: 'O Ambiente {{ $labels.ambiente }} está com o servidor {{ $labels.hostname }} com {{$value}} GB de espaço em disco disponível.'
+      summary: Solicite para a infra aumento no disco do servidor {{ $labels.hostname }}.
+    expr: round((NDD_DB_Espaco_disponivel_disco_bytes{produto="nigeria"} / 1073741824),1) <= 20 or round((sql_NDD_DB_Espaco_disponivel_disco_bytes{produto="nigeria"} / 1073741824),1) <= 20
+    for: 60m
+    labels:
+      severity: media
+      sre_team: "yes"
+      support_team: "yes"
+      nivel: "negocio"
+
+  - alert: BilhetagemPendenteEnvioWSNeogrid
+    annotations:
+      description: 'Ambiente {{ $labels.ambiente }} está com {{ $value }} registros pendentes de envio para o Web Service da Neogrid a mais de 24 horas.'
+      summary: Monitoramento Bilhetagem - Pendentes de envio para WS NG
+    expr: NDD_Bilhetagem_Pendente_Envio_WS{produto="nigeria",env="prd"} > 0 or sql_NDD_Bilhetagem_Pendente_Envio_WS{produto="nigeria",env="prd"} > 0
+    for: 24h
+    labels:
+      severity: media
+      sre_team: "yes"
+      dev_team: "yes"
+      nivel: "negocio"
+
+  - alert: BilhetagemNaoConsolidada
+    annotations:
+      description: 'Ambiente {{ $labels.ambiente }} está com Bilhetagens não consolidadas a mais de 24 horas.'
+      summary: 'Monitoramento Bilhetagem - Existem Bilhetagens não consolidadas'
+    expr: NDD_Bilhetagem_Nao_Consolidada{produto="nigeria"} > 0 or sql_NDD_Bilhetagem_Nao_Consolidada{produto="nigeria"} > 0
+    for: 24h
+    labels:
+      severity: media
+      sre_team: "yes"
+      dev_team: "yes"
+      nivel: "negocio"
+
+  - alert: ValidacaoLicencaBilhetavel
+    annotations:
+      description: 'Ambiente {{ $labels.ambiente }} está com {{ $value }} registros pendentes de validação de licença a mais de 10 horas.'
+      summary: Monitoramento Bilhetagem - Pendentes de validação de licença
+    expr: NDD_Bilhetagem_Pendente_Validacao_Licenca{produto="nigeria"} > 0 or sql_NDD_Bilhetagem_Pendente_Validacao_Licenca{produto="nigeria"} > 0
+    for: 10h
+    labels:
+      severity: media
+      sre_team: "yes"
+      dev_team: "yes"
+      nivel: "negocio"
+
+  - alert: AltaPorcentagemDeRejeicao
+    annotations:
+      description: 'Ambiente {{ $labels.ambiente }} está com {{ $value }}% dos documentos rejeitados no últimos 15 minutos.'
+      summary: Isso pode indicar falha de comunicação com o HSM. Verifique se a comunicação com o HSM está ocorrendo normalmente. 
+    expr: NDD_PORCENTAGEM_REJEICAO{produto="nigeria"} > 70 or sql_NDD_PORCENTAGEM_REJEICAO{produto="nigeria"} > 70
+    for: 1m
+    labels:
+      severity: critica
+      support_team: "yes"
+      nivel: "negocio"
+################################################# ALERTAS EXTRACAO ###################################################
+
+  - alert: ExtracaoControleFrontPendenteEmissao
+    annotations:
+      description: 'O ambiente {{ $labels.ambiente }} está com {{ $value }} registros de {{$labels.aplicacao}} pendentes de processamento na tabela Extracao_Controle_Front_Emissao.'
+      summary: 'Avalie se o Host Extrator {{$labels.aplicacao}} está funcional. Para mais detalhes, acesse: https://grafana.fiscalneogrid.com/d/i-W-sVK7k/ndd-negocio-cte?viewPanel=66&orgId=1&refresh=10s'
+    expr: 'NDD_Documentos_Extracao_Controle_Front_Pendente_Emissao{produto="nigeria"} > 100 or sql_NDD_Documentos_Extracao_Controle_Front_Pendente_Emissao{produto="nigeria"} > 100'
+    for: 5m
+    labels:
+      severity: alta
+      sre_team: "yes"
+      support_team: "yes"
+      sup24x7_team: "yes"
+      nivel: "negocio"
+  
+  - alert: ExtracaoMensagemFrontPendenteEmissao
+    annotations:
+      description: 'O ambiente {{ $labels.ambiente }} está com {{ $value }} registros de {{$labels.aplicacao}} pendentes de processamento na tabela Extracao_Mensagem_Front_Emissao.'
+      summary: 'Avalie se o Host Extrator {{$labels.aplicacao}} está funcional. Para mais detalhes, acesse: https://grafana.fiscalneogrid.com/d/i-W-sVK7k/ndd-negocio-cte?viewPanel=66&orgId=1&refresh=10s'
+    expr: 'NDD_Documentos_Extracao_Mensagem_Front_Pendente_Emissao{produto="nigeria"} > 1000 or sql_NDD_Documentos_Extracao_Mensagem_Front_Pendente_Emissao{produto="nigeria"} > 1000'
+    for: 5m
+    labels:
+      severity: alta
+      sre_team: "yes"
+      support_team: "yes"
+      sup24x7_team: "yes"
+      nivel: "negocio"
+  
+  - alert: ExtracaoStatusFrontPendenteEmissao
+    annotations:
+      description: 'O ambiente {{ $labels.ambiente }} está com {{ $value }} registros de {{$labels.aplicacao}} pendentes de processamento na tabela Extracao_Status_Front_Emissao.'
+      summary: 'Avalie se o Host Extrator {{$labels.aplicacao}} está funcional. Para mais detalhes, acesse: https://grafana.fiscalneogrid.com/d/i-W-sVK7k/ndd-negocio-cte?viewPanel=66&orgId=1&refresh=10s'
+    expr: 'NDD_Documentos_Extracao_Status_Front_Pendente_Emissao{produto="nigeria"} > 500 or sql_NDD_Documentos_Extracao_Status_Front_Pendente_Emissao{produto="nigeria"} > 500'
+    for: 5m
+    labels:
+      severity: alta
+      sre_team: "yes"
+      support_team: "yes"
+      sup24x7_team: "yes"
+      nivel: "negocio"
+  
+  - alert: ExtracaoMensagemPendenteEmissao
+    annotations:
+      description: 'O ambiente {{ $labels.ambiente }} está com {{ $value }} registros de {{$labels.aplicacao}} pendentes de processamento na tabela Extracao_Mensagem_Emissao.'
+      summary: 'Avalie se o Host Extrator {{$labels.aplicacao}} está funcional. Para mais detalhes, acesse: https://grafana.fiscalneogrid.com/d/i-W-sVK7k/ndd-negocio-cte?viewPanel=66&orgId=1&refresh=10s'
+    expr: 'NDD_Documentos_Extracao_Mensagem_Pendente_Emissao{produto="nigeria"} > 1000 or sql_NDD_Documentos_Extracao_Mensagem_Pendente_Emissao{produto="nigeria"} > 1000'
+    for: 5m
+    labels:
+      severity: alta
+      sre_team: "yes"
+      support_team: "yes"
+      sup24x7_team: "yes"
+      nivel: "negocio"
+  
+  - alert: ExtracaoStatusPendenteEmissao
+    annotations:
+      description: 'O ambiente {{ $labels.ambiente }} está com {{ $value }} registros de {{$labels.aplicacao}} pendentes de processamento na tabela Extracao_Status_Emissao.'
+      summary: 'Avalie se o Host Extrator {{$labels.aplicacao}} está funcional. Para mais detalhes, acesse: https://grafana.fiscalneogrid.com/d/i-W-sVK7k/ndd-negocio-cte?viewPanel=66&orgId=1&refresh=10s'
+    expr: 'NDD_Documentos_Extracao_Status_Pendente_Emissao{produto="nigeria"} > 500 or sql_NDD_Documentos_Extracao_Status_Pendente_Emissao{produto="nigeria"} > 500'
+    for: 5m
+    labels:
+      severity: alta
+      sre_team: "yes"
+      support_team: "yes"
+      sup24x7_team: "yes"
+      nivel: "negocio"
+  
+  - alert: ExtracaoControleFrontPendenteRecepcao
+    annotations:
+      description: 'O ambiente {{ $labels.ambiente }} está com {{ $value }} registros de {{$labels.aplicacao}} pendentes de processamento na tabela Extracao_Controle_Front_Recepcao.'
+      summary: 'Avalie se o Host Extrator {{$labels.aplicacao}} está funcional. Para mais detalhes, acesse: https://grafana.fiscalneogrid.com/d/i-W-sVK7k/ndd-negocio-cte?viewPanel=66&orgId=1&refresh=10s'
+    expr: 'NDD_Documentos_Extracao_Controle_Front_Pendente_Recepcao{produto="nigeria"} > 100 or sql_NDD_Documentos_Extracao_Controle_Front_Pendente_Recepcao{produto="nigeria"} > 100'
+    for: 5m
+    labels:
+      severity: alta
+      sre_team: "yes"
+      support_team: "yes"
+      sup24x7_team: "yes"
+      nivel: "negocio"
+  
+  - alert: ExtracaoMensagemPendenteRecepcao
+    annotations:
+      description: 'O ambiente {{ $labels.ambiente }} está com {{ $value }} registros de {{$labels.aplicacao}} pendentes de processamento na tabela Extracao_Mensagem_Recepcao.'
+      summary: 'Avalie se o Host Extrator {{$labels.aplicacao}} está funcional. Para mais detalhes, acesse: https://grafana.fiscalneogrid.com/d/i-W-sVK7k/ndd-negocio-cte?viewPanel=66&orgId=1&refresh=10s'
+    expr: 'NDD_Documentos_Extracao_Mensagem_Pendente_Recepcao{produto="nigeria"} > 1000 or sql_NDD_Documentos_Extracao_Mensagem_Pendente_Recepcao{produto="nigeria"} > 1000'
+    for: 5m
+    labels:
+      severity: alta
+      sre_team: "yes"
+      support_team: "yes"
+      sup24x7_team: "yes"
+      nivel: "negocio"
+  
+  - alert: ExtracaoStatusPendenteRecepcao
+    annotations:
+      description: 'O ambiente {{ $labels.ambiente }} está com {{ $value }} registros de {{$labels.aplicacao}} pendentes de processamento na tabela Extracao_Status_Recepcao.'
+      summary: 'Avalie se o Host Extrator {{$labels.aplicacao}} está funcional. Para mais detalhes, acesse: https://grafana.fiscalneogrid.com/d/i-W-sVK7k/ndd-negocio-cte?viewPanel=66&orgId=1&refresh=10s'
+    expr: 'NDD_Documentos_Extracao_Status_Pendente_Recepcao{produto="nigeria"} > 500 or sql_NDD_Documentos_Extracao_Status_Pendente_Recepcao{produto="nigeria"} > 500'
+    for: 5m
+    labels:
+      severity: alta
+      sre_team: "yes"
+      support_team: "yes"
+      sup24x7_team: "yes"
+      nivel: "negocio"
+  
+################################################ FIM ALERTAS EXTRACAO ###################################################
+
+  - alert: ExtracaoMensagemComErroEmissao
+    annotations:
+      description: 'O ambiente {{ $labels.ambiente }} está com {{ $value }} registros de {{$labels.aplicacao}} com ERRO na tabela Extracao_Mensagem_Emissao.'
+      summary: 'Avalie os registros com erro na tabela de Extracao_Mensagem_Emissao e, se necessário, registre um Issue.'
+    expr: 'NDD_Documentos_Extracao_Mensagem_ComErro_Emissao{produto="nigeria"} > 5 or sql_NDD_Documentos_Extracao_Mensagem_ComErro_Emissao{produto="nigeria"} > 5'
+    for: 5m
+    labels:
+      severity: alta
+      sre_team: "yes"
+      support_team: "yes"
+      sup24x7_team: "no"
+      nivel: "negocio"
+  
+  - alert: ExtracaoMensagemFrontComErroEmissao
+    annotations:
+      description: 'O ambiente {{ $labels.ambiente }} está com {{ $value }} registros de {{$labels.aplicacao}} com ERRO na tabela Extracao_Mensagem_Front_Emissao.'
+      summary: 'Avalie os registros com erro na tabela de Extracao_Mensagem_Front_Emissao e, se necessário, registre um Issue.'
+    expr: 'NDD_Documentos_Extracao_Mensagem_Front_ComErro_Emissao{produto="nigeria"} > 5 or sql_NDD_Documentos_Extracao_Mensagem_Front_ComErro_Emissao{produto="nigeria"} > 5'
+    for: 5m
+    labels:
+      severity: alta
+      sre_team: "yes"
+      support_team: "yes"
+      sup24x7_team: "no"
+      nivel: "negocio"
+  
+  - alert: ExtracaoMensagemComErroRecepcao
+    annotations:
+      description: 'O ambiente {{ $labels.ambiente }} está com {{ $value }} registros de {{$labels.aplicacao}} com ERRO na tabela Extracao_Mensagem_Recepcao.'
+      summary: 'Avalie os registros com erro na tabela de Extracao_Mensagem_Recepcao e, se necessário, registre um Issue.'
+    expr: 'NDD_Documentos_Extracao_Mensagem_ComErro_Recepcao{produto="nigeria"} > 5 or sql_NDD_Documentos_Extracao_Mensagem_ComErro_Recepcao{produto="nigeria"} > 5'
+    for: 5m
+    labels:
+      severity: alta
+      sre_team: "yes"
+      support_team: "yes"
+      sup24x7_team: "no"
+      nivel: "negocio"
+  
+  - alert: ExtracaoMensagemFrontComErroRecepcao
+    annotations:
+      description: 'O ambiente {{ $labels.ambiente }} está com {{ $value }} registros de {{$labels.aplicacao}} com ERRO na tabela Extracao_Mensagem_Front_Recepcao.'
+      summary: 'Avalie os registros com erro na tabela de Extracao_Mensagem_Front_Recepcao e, se necessário, registre um Issue.'
+    expr: 'NDD_Documentos_Extracao_Mensagem_Front_ComErro_Recepcao{produto="nigeria"} > 5 or sql_NDD_Documentos_Extracao_Mensagem_Front_ComErro_Recepcao{produto="nigeria"} > 5'
+    for: 5m
+    labels:
+      severity: alta
+      sre_team: "yes"
+      support_team: "yes"
+      sup24x7_team: "no"
+      nivel: "negocio"
+  
+################################################# FIM EXTRACAO COM ERRO ###################################################     
+
+  
+  - alert: NFSeDocumentosPendentesCommonInput
+    annotations:
+      description: 'A tbCommonInput de NFSe do ambiente {{ $labels.ambiente }} está com {{ $value }} documentos pendentes de processamento por mais de 15 minutos.'
+      summary: 'Avalie o serviço da Input.'
+    expr: 'NDD_Documentos_NFSe_Processamento_tbCommonInputProcessing{produto="nigeria"} > 5 or sql_NDD_Documentos_NFSe_Processamento_tbCommonInputProcessing{produto="nigeria"} > 5'
+    for: 15m
+    labels:
+      severity: alta
+      support_team: "yes"
+      nivel: "negocio"
+  
+  - alert: CTeMDFeDocumentosPendentesInput
+    annotations:
+      description: 'A TBDATABASEINPUT de CTe\MDFe do ambiente {{ $labels.ambiente }} está com {{ $value }} documentos pendentes de processamento por mais de 5 minutos.'
+      summary: 'Verifique se o JOB está correto em relação ao JOBKEY configurado no Core NDD. Verifique também se este JOB está vinculado a um Executor\Instância.'
+    expr: 'NDD_Documentos_CTeMDFe_Pendentes_Input{produto="nigeria"} > 0 or sql_NDD_Documentos_CTeMDFe_Pendentes_Input{produto="nigeria"} > 0'
+    for: 2m
+    labels:
+      severity: alta
+      support_team: "yes"
+      nivel: "negocio"
+    
+  - alert: NFeDocumentosPendentesInput
+    annotations:
+      description: 'A TBDATABASEINPUT de NFe do ambiente {{ $labels.ambiente }} está com {{ $value }} documentos pendentes de processamento por mais de 5 minutos.'
+      summary: 'Verifique se o JOB está correto em relação ao JOBKEY configurado no Core NDD. Verifique também se este JOB está vinculado a um Executor\Instância.'
+    expr: 'NDD_Documentos_NFe_Pendentes_Input{produto="nigeria"} > 0 or sql_NDD_Documentos_NFe_Pendentes_Input{produto="nigeria"} > 0'
+    for: 2m
+    labels:
+      severity: alta
+      support_team: "yes"
+      nivel: "negocio"
+  
+  - alert: NFSeDocumentosPendentesInput
+    annotations:
+      description: 'A tbInputDocuments de NFSe do ambiente {{ $labels.ambiente }} está com {{ $value }} documentos pendentes de processamento por mais de 10 minutos.'
+      summary: 'Verifique se o JOB está correto em relação ao JOBKEY configurado no Core NDD. Verifique também se este JOB está vinculado a um Executor\Instância.'
+    expr: 'NDD_Documentos_NFSe_Pendentes_Input{produto="nigeria"} > 0 or sql_NDD_Documentos_NFSe_Pendentes_Input{produto="nigeria"} > 0'
+    for: 2m
+    labels:
+      severity: alta
+      support_team: "yes"
+      nivel: "negocio"
+  
+  - alert: CTeEmissaoEmProcessamentoPortal
+    annotations:
+      description: 'Foram identificados {{ $value }} CTe Emissão em processamento no Portal no ambiente {{ $labels.ambiente }}.'
+      summary: 'Avalie se há acumulo nas tabelas de Extração ou alguma SEFAZ está instável.' 
+    expr: 'NDD_CTe_Emissao_Em_Processamento_Portal{produto="nigeria"} > 0 or sql_NDD_CTe_Emissao_Em_Processamento_Portal{produto="nigeria"} > 0'
+    for: 10m
+    labels:
+      severity: alta
+      support_team: "yes"
+      nivel: "negocio"
+  
+  - alert: CTeEmissaoEventosEmProcessamentoPortal
+    annotations:
+      description: 'Foram identificados {{ $value }} Eventos de CTe Emissão em processamento no Portal no ambiente {{ $labels.ambiente }}.'
+      summary: 'Avalie se há acumulo nas tabelas de Extração ou alguma SEFAZ está instável.' 
+    expr: 'NDD_CTe_Emissao_Eventos_Em_Processamento_Portal{produto="nigeria"} > 0 or sql_NDD_CTe_Emissao_Eventos_Em_Processamento_Portal{produto="nigeria"} > 0'
+    for: 10m
+    labels:
+      severity: alta
+      support_team: "yes"
+      nivel: "negocio"
+  
+  - alert: CTeInutilizacoesEmProcessamentoPortal
+    annotations:
+      description: 'Foram identificadas {{ $value }} Inutilizações de CTe em processamento no Portal no ambiente {{ $labels.ambiente }}.'
+      summary: 'Avalie se há acumulo nas tabelas de Extração ou alguma SEFAZ está instável.' 
+    expr: 'NDD_CTe_Inutilizacao_Em_Processamento_Portal{produto="nigeria"} > 0 or sql_NDD_CTe_Inutilizacao_Em_Processamento_Portal{produto="nigeria"} > 0'
+    for: 10m
+    labels:
+      severity: alta
+      support_team: "yes"
+      nivel: "negocio"
+  
+  - alert: CTeRecepcaoEmProcessamentoPortal
+    annotations:
+      description: 'Foram identificados {{ $value }} CTe de Recepção em processamento no Portal no ambiente {{ $labels.ambiente }}.'
+      summary: 'Avalie se há acumulo nas tabelas de Extração ou alguma SEFAZ está instável.' 
+    expr: 'NDD_CTe_Recepcao_Em_Processamento_Portal{produto="nigeria"} > 0 or sql_NDD_CTe_Recepcao_Em_Processamento_Portal{produto="nigeria"} > 0'
+    for: 10m
+    labels:
+      severity: alta
+      support_team: "yes"
+      nivel: "negocio"
+  
+  - alert: CTeRecepcaoEventosEmProcessamentoPortal
+    annotations:
+      description: 'Foram identificados {{ $value }} CTe de Recepção em processamento no Portal no ambiente {{ $labels.ambiente }}.'
+      summary: 'Avalie se há acumulo nas tabelas de Extração ou alguma SEFAZ está instável.' 
+    expr: 'NDD_CTe_Recepcao_Eventos_Em_Processamento_Portal{produto="nigeria"} > 0 or sql_NDD_CTe_Recepcao_Eventos_Em_Processamento_Portal{produto="nigeria"} > 0'
+    for: 10m
+    labels:
+      severity: alta
+      support_team: "yes"
+      nivel: "negocio"
+  
+  - alert: MDFeEmissaoEmProcessamentoPortal
+    annotations:
+      description: 'Foram identificados {{ $value }} MDFe Emissão em processamento no Portal no ambiente {{ $labels.ambiente }}.'
+      summary: 'Avalie se há acumulo nas tabelas de Extração ou alguma SEFAZ está instável.' 
+    expr: 'NDD_MDFe_Emissao_Em_Processamento_Portal{produto="nigeria"} > 0 or sql_NDD_MDFe_Emissao_Em_Processamento_Portal{produto="nigeria"} > 0'
+    for: 10m
+    labels:
+      severity: alta
+      support_team: "yes"
+      nivel: "negocio"
+  
+  - alert: MDFeEmissaoEventosEmProcessamentoPortal
+    annotations:
+      description: 'Foram identificados {{ $value }} Eventos de MDFe Emissão em processamento no Portal no ambiente {{ $labels.ambiente }}.'
+      summary: 'Avalie se há acumulo nas tabelas de Extração ou alguma SEFAZ está instável.' 
+    expr: 'NDD_MDFe_Emissao_Eventos_Em_Processamento_Portal{produto="nigeria"} > 0 or sql_NDD_MDFe_Emissao_Eventos_Em_Processamento_Portal{produto="nigeria"} > 0'
+    for: 10m
+    labels:
+      severity: alta
+      support_team: "yes"
+      nivel: "negocio"
+  
+  - alert: MDFeRecepcaoEmProcessamentoPortal
+    annotations:
+      description: 'Foram identificados {{ $value }} MDFe de Recepção em processamento no Portal no ambiente {{ $labels.ambiente }}.'
+      summary: 'Avalie se há acumulo nas tabelas de Extração ou alguma SEFAZ está instável.' 
+    expr: 'NDD_MDFe_Recepcao_Em_Processamento_Portal{produto="nigeria"} > 0 or sql_NDD_MDFe_Recepcao_Em_Processamento_Portal{produto="nigeria"} > 0'
+    for: 10m
+    labels:
+      severity: alta
+      support_team: "yes"
+      nivel: "negocio"
+  
+  - alert: MDFeRecepcaoEventosEmProcessamentoPortal
+    annotations:
+      description: 'Foram identificados {{ $value }} Eventos de MDFe de Recepção em processamento no Portal no ambiente {{ $labels.ambiente }}.'
+      summary: 'Avalie se há acumulo nas tabelas de Extração ou alguma SEFAZ está instável.' 
+    expr: 'NDD_MDFe_Recepcao_Eventos_Em_Processamento_Portal{produto="nigeria"} > 0 or sql_NDD_MDFe_Recepcao_Eventos_Em_Processamento_Portal{produto="nigeria"} > 0'
+    for: 10m
+    labels:
+      severity: alta
+      support_team: "yes"
+      nivel: "negocio"
+  
+
+################################################# FIM - ALERTAS DOCUMENTOS EM PROCESSAMENTO ###################################################
+  - alert: LicencaComTipoCobrancaDivergente
+    annotations:
+      description: 'A licença {{ $labels.nomelicenca }} de ID {{ $labels.id }} está com o TipoCobranca divergente no ambiente {{ $labels.ambiente }}.'
+      summary: 'Avalie e corrija a configuração incorreta para que o faturamento não seja impactado!' 
+    expr: 'NDD_Licenca_Validacao_TipoCobranca{produto="nigeria"} > 0 or sql_NDD_Licenca_Validacao_TipoCobranca{produto="nigeria"} > 0'
+    for: 1m
+    labels:
+      severity: alta
+      support_team: "no"
+      services_team: "yes" 
+      nivel: "negocio"
+  
+################################################# INICIO - ALERTAS DFE NEOGRID ###################################################
+  
+  - alert: NDD_Consulta_DFe
+    annotations:
+      description: 'A comunicação com a Sefaz não foi realizada a nenhum CNPJ nos últimos 10 minutos'
+      summary: 'Favor avaliar se o Webservice download de eventos encontra-se com instabilidade no site da SEFAZ, caso não identifique nenhuma anomalia, por gentileza entre em contato com o time de suporte' 
+    expr: 'NDD_Consulta_DFe{ambiente=~"neogrid"} >= 1 or sql_NDD_Consulta_DFe{ambiente=~"neogrid"} >= 1'
+    for: 30m
+    labels:
+      severity: critical
+      NeogridDI_team: "yes" 
+      nivel: "negocio"
+  
+  - alert: NDD_SemConsultarDFe
+    annotations:
+      description: 'Foi identificado que o CNPJ não realizou a consulta do DFe nos últimos minutos'
+      summary: 'Favor validar se o cliente está com o DFE ativo e com o Certificado Digital válido. Caso o problema persista, entre em contato com o time de suporte' 
+    expr: 'NDD_SemConsultarDFe{ambiente=~"neogrid"} >= 1 or sql_NDD_SemConsultarDFe{ambiente=~"neogrid"} >= 1'
+    for: 30m
+    labels:
+      severity: critical
+      NeogridDI_team: "yes" 
+      nivel: "negocio"
+  
+  - alert: DivergenciaNSU
+    annotations:
+      description: 'Há downloads de documentos na Sefaz disponíveis e pendente da aplicação'
+      summary: 'Favor validar se o cliente está com o DFE ativo e com o Certificado Digital válido. Caso o problema persista, entre em contato com o time de suporte' 
+    expr: 'DivergenciaNSU{ambiente=~"neogrid"} >= 1 or sql_DivergenciaNSU{ambiente=~"neogrid"} >= 1'
+    for: 60m
+    labels:
+      severity: critical
+      NeogridDI_team: "yes" 
+      nivel: "negocio"
+  
+  - alert: NDDTransacoesBilhetagemPendentes
+    annotations:
+      description: 'Ambiente {{ $labels.ambiente }} está com {{ $value }} registros de transações pendentes de envio para o Web Service da Neogrid'
+      summary: Monitoramento Bilhetagem - Pendentes de envio para WS NG
+    expr: 'NDD_Bilhetagem_Verifica_Transacao{produto="nigeria"} > 0 or sql_NDD_Bilhetagem_Verifica_Transacao{produto="nigeria"} > 0'
+    for: 2h
+    labels:
+      severity: media
+      support_team: "yes"
+      dev_team: "yes"
+      nivel: "negocio"
+  
+# Alertas NFCE
+  
+  - alert: DocumentosPendentesInputNFCe
+    annotations:
+      description: 'A TBDATABASEINPUT de NFCe do ambiente {{ $labels.ambiente }} está com {{ $value }} documentos pendentes de processamento por mais de 5 minutos.'
+      summary: 'Verifique se o JOB está correto em relação ao JOBKEY configurado na Retaguarda. Verifique também se este JOB está vinculado a um Executor\Instância.'
+    expr: '(NDD_Documentos_NFCe_Pendentes_Input{produto="nigeria"}) > 0 or sql_NDD_Documentos_NFCe_Pendentes_Input{produto="nigeria"} > 0'
+    for: 1m
+    labels:
+      severity: critical
+      support_team: "yes"
+      email: "yes"  
+      nivel: "negocio"
+  
+  - alert: DocumentosPendentesInputNFCeWS
+    annotations:
+      description: 'A TBDATABASEINPUTWS de NFCe do ambiente {{ $labels.ambiente }} está com {{ $value }} documentos pendentes de processamento por mais de 5 minutos.'
+      summary: 'Verifique se o JOB está correto em relação ao JOBKEY configurado na Retaguarda. Verifique também se este JOB está vinculado a um Executor\Instância.'
+    expr: '(NDD_Documentos_NFCe_Pendentes_Input_WS{produto="nigeria"}) > 0 or sql_NDD_Documentos_NFCe_Pendentes_Input_WS{produto="nigeria"} > 0'
+    for: 1m
+    labels:
+      severity: critical
+      support_team: "yes"
+      email: "yes"  
+      nivel: "negocio"
+  
+  - alert: NFCeEmpresasPorConcentrador
+    annotations:
+      description: 'O Concentrador {{ $labels.NAME }} está com {{ $value }} empresas vinculadas.'
+      summary: 'Deve-se criar um novo Concentrador para suportar as novas Empresas.'
+    expr: '(NDD_NFCe_Empresas_Por_Concentrador{produto="nigeria"}) > 90 or sql_NDD_NFCe_Empresas_Por_Concentrador{produto="nigeria"} > 90'
+    for: 1m
+    labels:
+      severity: critical
+      support_team: "yes"
+      email: "yes" 
+      nivel: "negocio" 
+  
+  - alert: SessaoBloqueada
+    expr: '(NDD_DB_Sessao_Bloqueada{produto="nigeria"}) >= 1 or sql_NDD_DB_Sessao_Bloqueada{produto="nigeria"} >= 1'
+    for: 10m
+    labels:
+      severity: critical
+      sre_team: "yes"
+      support_team: "yes"
+      email: "yes"  
+      nivel: "negocio"
+    annotations:
+      summary: "Sempre que uma Sessão ficar bloqueada no banco por mais de 10 minutos."
+      description: "O ambiente {{ $labels.ambiente }} está com {{ $value }} sessões bloqueadas no banco  ({{ $labels.banco }})."
+      acao: 'Será necessário conectar no servidor e verificar o que está provocando este bloqueio.'
+      ambiente: "{{ $labels.ambiente }}" 
+  
+  - alert: ConcentradorSemComunicacao
+    expr: 'NDD_DB_Concentrador_Lastcomunication{produto="nigeria"} == 1 or sql_NDD_DB_Concentrador_Lastcomunication{produto="nigeria"} == 1'
+    for: 1m
+    labels:
+      severity: critical
+      sre_team: "yes"
+      support_team: "yes"
+      nfce_sre_mail: "yes"
+      email: "no"  
+      nivel: "negocio"
+    annotations:
+      summary: "Sempre que um concentrador ficar sem comunicação por mais de 5 minutos."
+      description: "O ambiente {{ $labels.ambiente }} está com o concentrador {{ $labels.nome }} sem comunicação."
+      acao: 'Será necessário conectar no servidor e verificar o que está provocando esta situação, pode ser um travamento.'
+      ambiente: "{{ $labels.ambiente }}" 
+  
+  - alert: ProcessosPendentesPorJob
+    expr: 'NDD_DB_NFCe_Processos_pendentes_por_job{produto="nigeria"} >= 450 or sql_NDD_DB_NFCe_Processos_pendentes_por_job{produto="nigeria"} >= 450'
+    for: 60s
+    labels:
+      severity: critical
+      sre_team: "yes"
+      support_team: "yes"
+      email: "yes" 
+      nivel: "negocio" 
+    annotations:
+      summary: "Sempre que o número de processos de can-inu (kind 144) for superior a 450."
+      description: "O ambiente {{ $labels.ambiente }} está com {{ $value }} processos de can-inu represados."
+      acao: 'Avaliar se todos os processos são de apenas um cliente. Caso sim, providenciar o envio cadenciado. Caso não avaliar instabilidade na SEFAZ'
+      ambiente: "{{ $labels.ambiente }}"                   
+  
+  - alert: InsercaoColdPendente
+    expr: '(NDD_DB_NFCe_Insercao_Cold_Pendente{produto="nigeria"}) > 0 or sql_NDD_DB_NFCe_Insercao_Cold_Pendente{produto="nigeria"} > 0'
+    for: 5d
+    labels:
+      severity: critical
+      sre_team: "yes"
+      support_team: "yes"
+      email: "yes" 
+      nivel: "negocio" 
+    annotations:
+      summary: "Sempre que o número de documentos sem inserção em cold for superior a 0 por 5 dias."
+      description: "O ambiente {{ $labels.ambiente }} está com {{ $value }} documentos aguardando inserção em cold."
+      acao: 'Realizar a tentativa de reprocessamento para o cold via e-monitor e/ou analisar o erro no log do serviço de inserção em cold (NDDigitaleForms_NFCeEletronicColdService). '
+      ambiente: "{{ $labels.ambiente }}"  
+  
+  - alert: ErroValidaLicenca
+    expr: '(NDD_Erro_Valida_Licenca{produto="nigeria",ambiente="totvs"}) > 5 or sql_NDD_Erro_Valida_Licenca{produto="nigeria",ambiente="totvs"} > 5'
+    for: 5m
+    labels:
+      severity: critical
+      sre_team: "yes"
+      support_team: "yes"
+      email: "yes"  
+      nivel: "negocio"
+    annotations:
+      summary: "que ocorrerem erros na validação da licença no ambiente Totvs"
+      description: "O ambiente {{ $labels.ambiente }} está com {{ $value }} erros de validação de licença"
+      acao: 'Avaliar a conexão e os registros presentes na base do Redis e Executar a ferramenta para carregar o cache'
+      ambiente: "{{ $labels.ambiente }}"
