@@ -455,7 +455,6 @@ prometheus_scrape_configs:
       - https://apiportalmonitoramentohomolog.fiscalneogrid.com/api/public/is-alive
       - https://ngconnectorhomolog.fiscalneogrid.com/Service.asmx
       - https://portalmonitoramentohomolog.fiscalneogrid.com/
-      - https://apiconectorhomolog.fiscalneogrid.com/index.html
       labels:
         severity: 'critical'
         ambiente: 'nigeria-hml'
