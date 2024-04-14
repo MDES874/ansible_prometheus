@@ -29,6 +29,10 @@ alertmanager_receivers:
   webhook_configs:
     - url: http://br-oci-nigl01.dcndd.local:9567/webhook
 
+- name: keepaneye
+  webhook_configs:
+    - url: https://webhook.site/13a22528-765a-4ad7-8a15-d3f516a69fe9    
+
 - name: 'sre-team-mail'
   email_configs:
   - to: 'maick.souza@ndd.tech' 
@@ -67,8 +71,11 @@ alertmanager_route:
     continue: true
     routes:
     - receiver: "alertsnitch"
-      continue: true          
-
+      continue: true
+    - receiver: 'sre-team-mail'
+      continue: true               
+    - receiver: "keepaneye"
+      continue: true   
 
 ### FIM ALERMANAGER ROUTES
 
